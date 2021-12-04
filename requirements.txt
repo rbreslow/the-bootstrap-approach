@@ -1,0 +1,8 @@
+# Jupyter Requirements
+ipykernel==6.5.0
+jupyterlab==3.2.2
+
+# For Graphing
+matplotlib==3.4.3
+numpy==1.21.4
+matplotlib-label-lines==0.4.3
