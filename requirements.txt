@@ -1,5 +1,6 @@
 # Jupyter Requirements
 ipykernel==6.5.0
+ipywidgets
 jupyterlab==3.2.2
 
 # For Graphing
@@ -9,3 +10,6 @@ matplotlib-label-lines==0.4.3
 
 # For Visualizing Data
 tabulate == 0.8.9
+
+# Tests
+coverage==6.2

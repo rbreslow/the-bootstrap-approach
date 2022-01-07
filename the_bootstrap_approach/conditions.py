@@ -50,6 +50,10 @@ class Conditions(ABC):
         pass
 
     @property
+    def torque(self):
+        return engine_torque(self.power, self.propeller_rps)
+
+    @property
     def propeller_rps(self):
         return self.engine_rpm / 60
 

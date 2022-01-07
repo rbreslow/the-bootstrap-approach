@@ -1,0 +1,6 @@
+#!/bin/bash
+
+coverage run  --source=. -m unittest discover tests
+
+coverage report --omit="*tests*"
+coverage html --omit="*tests*"
