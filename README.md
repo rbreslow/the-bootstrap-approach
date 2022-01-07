@@ -2,7 +2,9 @@
 
 In [Performance of Light Aircraft](https://arc.aiaa.org/doi/book/10.2514/4.103704), Dr. John Lowry provides a methodology, The Bootstrap Approach, for quantifying the performance of single-engine piston aircraft.
 
-This repository contains the beginnings of a Python representation of Dr. Lowry's work that I used to model performance data for my 1981 Piper Dakota that I couldn't get from the manufacturer.
+It's called The Bootstrap Approach because you start off flight testing for your plane's drag coefficient and take a few measurements. Then, you use these few constants (see the [dataplate](the_bootstrap_approach/dataplate.py)) to determine everything you could want to know about your aircraft's performance in any conditions.
+
+This repository contains the beginnings of a Python representation of Dr. Lowry's work that I used to model performance data for my 1981 Piper Dakota.
 
 There are a collection of Jupyter Notebooks that I've been using to interface with the library to make charts and generate performance tables.
 
