@@ -31,3 +31,10 @@ jobs:
       - run: ./scripts/update
 
       - run: ./scripts/test
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v2
+        with:
+          directory: ./htmlcov
+          fail_ci_if_error: true
+          verbose: true
