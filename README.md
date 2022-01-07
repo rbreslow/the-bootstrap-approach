@@ -29,3 +29,19 @@ I performed a weight and balance before the test. Then, I used the fuel totalize
 When I initially leveled off at FL220, my indicated airspeed hovered around 64 KIAS. Then, it increased and fluctuated between 71-74. The JPI reported 46-47% bhp, although the HP constant may be incorrectly calibrated.
 
 Pretty close!
+
+## References
+
+[1]	J. T. Lowry, Performance of Light Aircraft. Reston, VA: American Institute of Aeronautics & Astronautics, 1999.
+
+[2]	J. T. Lowry, Computing Airplane Performance with The Bootstrap Approach: A Field Guide. Billings, MT: Flight Physics, 1995.
+
+[3]	J. T. Lowry, “The Bootstrap Approach to Aircraft Performance (Part One – Fixed-Pitch Propeller Airplanes),” AVweb, 08-Dec-1999. [Online]. Available: https://www.avweb.com/features_old/the-bootstrap-approach-to-aircraft-performancepart-one-fixed-pitch-propeller-airplanes/.
+
+[4]	J. T. Lowry, “The Bootstrap Approach to Aircraft Performance (Part Two – Constant-Speed Propeller Airplanes),” AVweb, 12-Dec-1999. [Online]. Available: https://www.avweb.com/features_old/the-bootstrap-approach-to-aircraft-performancepart-two-constant-speed-propeller-airplanes/.
+
+[5]	“O-540 & IO-540 Operator’s Manual,” Lycoming Engines, Williamsport, PA, Mar. 2009.
+
+[6]	“Dakota Pilot’s Operating Handbook and FAA Approved Airplane Flight Manual,” Piper Aircraft Corporation, Vero Beach, FL, Jun. 1978.
+
+[7]	J. Yates, “Predicting Performance,” KITPLANES, 19-Feb-2015. [Online]. Available: https://www.kitplanes.com/predicting-performance/.
