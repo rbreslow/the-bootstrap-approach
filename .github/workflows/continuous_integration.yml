@@ -21,7 +21,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: Cache dependencies
+      - name: Cache Dependencies
         uses: actions/cache@v2
         with:
           path: ~/.cache/pip
@@ -32,9 +32,8 @@ jobs:
 
       - run: ./scripts/test
 
-      - name: Upload coverage to Codecov
+      - name: Upload Coverage to Codecov
         uses: codecov/codecov-action@v2
         with:
-          directory: ./htmlcov
           fail_ci_if_error: true
           verbose: true
