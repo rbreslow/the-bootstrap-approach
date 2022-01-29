@@ -42,6 +42,13 @@ def bootstrap_cruise_performance_table(
     pav = power_available(eta, operating_conditions.power)
     pxs = pav - pre
 
+    # ktas(vt) = pav / thrust
+    # as thrust goes down, but pav remains the same (e.g., 65% power), KTAS goes up! :O
+    # this is because more of it just goes straight into VT
+    # ktas(vt) = pre / drag
+    # as drag goes down, but power required to overcome the drag force remains the same (e.g., 65% power), KTAS goes up! :O
+    # if drag went down, how does power required to overcome the drag force remain the same?
+
     thrust = pav / vt
     drag = pre / vt
     excess_thrust = thrust - drag
@@ -68,7 +75,7 @@ def bootstrap_cruise_performance_table(
 
     if expanded:
         return np.column_stack(
-            (kcas, ktas, eta, thrust, drag, roc, aoc, ftnm, rpm, pbhp, gph, fuel_flow_per_knot, mpg)
+            (kcas, ktas, eta, thrust, drag, roc, aoc, ftnm, pre, pav, pxs, rpm, pbhp, gph, fuel_flow_per_knot, mpg)
         )
     else:
         return np.column_stack(
