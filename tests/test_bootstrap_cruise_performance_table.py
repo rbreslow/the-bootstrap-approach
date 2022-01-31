@@ -62,7 +62,7 @@ class TestBootstrapCruisePerformanceTable(unittest.TestCase):
                 self.table[0][1],
                 67.6,
                 # of 1 significant digits
-                abs_tol=10 ** -1,
+                abs_tol=10**-1,
             )
         )
 
@@ -72,7 +72,7 @@ class TestBootstrapCruisePerformanceTable(unittest.TestCase):
                 self.table[0][2],
                 0.6166,
                 # of 4 significant digits
-                abs_tol=10 ** -4,
+                abs_tol=10**-4,
             )
         )
 
@@ -82,7 +82,7 @@ class TestBootstrapCruisePerformanceTable(unittest.TestCase):
                 self.table[0][3],
                 453,
                 # of 0 significant digits
-                abs_tol=10 ** -0,
+                abs_tol=10**-0,
             )
         )
 
@@ -92,7 +92,7 @@ class TestBootstrapCruisePerformanceTable(unittest.TestCase):
                 self.table[0][4],
                 329,
                 # of 0 significant digits
-                abs_tol=10 ** -0,
+                abs_tol=10**-0,
             )
         )
 
@@ -102,7 +102,7 @@ class TestBootstrapCruisePerformanceTable(unittest.TestCase):
                 self.table[0][5],
                 273.2,
                 # of 0 significant digits
-                abs_tol=10 ** -0,
+                abs_tol=10**-0,
             )
         )
 
@@ -112,7 +112,7 @@ class TestBootstrapCruisePerformanceTable(unittest.TestCase):
                 self.table[0][6],
                 2.28,
                 # of 2 significant digits
-                abs_tol=10 ** -2,
+                abs_tol=10**-2,
             )
         )
 

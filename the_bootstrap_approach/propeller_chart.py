@@ -1,4 +1,3 @@
-import math
 import numpy as np
 
 # Dr. Lowry states:
@@ -93,7 +92,7 @@ def propeller_efficiency(
     :math:`\eta = {SDEF(Z)} \\times \eta(J/C_p{}^\\frac{1}{3}{}^2, C_{PX})`
 
     Args:
-        z_ratio: :math:`Z`, ratio of fuselage diameter to propeller diameter.
+        sdef: :math:`{SDEF}`, slowdown efficiency factor for the tractor propeller.
         propeller_advance_ratio: :math:`J`, propeller advance ratio.
         propeller_power_coefficient: :math:`C_P`, propeller power coefficient.
         power_adjustment_factor_x: :math:`X`, power adjustment factor.
@@ -141,9 +140,9 @@ def propeller_efficiency(
     return sdef * (
         coefficients[0]
         + (coefficients[1] * x)
-        + (coefficients[2] * x ** 2)
-        + (coefficients[3] * x ** 3)
-        + (coefficients[4] * x ** 4)
-        + (coefficients[5] * x ** 5)
-        + (coefficients[6] * x ** 6)
+        + (coefficients[2] * x**2)
+        + (coefficients[3] * x**3)
+        + (coefficients[4] * x**4)
+        + (coefficients[5] * x**5)
+        + (coefficients[6] * x**6)
     )

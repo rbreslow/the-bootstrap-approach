@@ -51,7 +51,7 @@ def relative_atmospheric_density_alt(oat_f, pressure_altitude):
     """
     # From Pg. 1 of TBA Field Guide.
     return (518.7 / (oat_f + 459.7)) * (
-        1 - 6.8749 * 10 ** -6 * pressure_altitude
+        1 - 6.8749 * 10**-6 * pressure_altitude
     ) ** 5.25625
 
 
@@ -78,7 +78,7 @@ def altitude_power_dropoff_factor(
     Args:
         relative_atmospheric_density:
             :math:`\sigma`, relative atmospheric density.
-        engine_power_altitude_dropoff_parameter:
+        altitude_engine_power_altitude_dropoff_parameter:
             :math:`C`, altitude engine power dropoff parameter.
 
     Returns:
@@ -90,12 +90,12 @@ def altitude_power_dropoff_factor(
 
 
 def c_to_f(c):
-    """Convert Celcius to Fahrenheit."""
+    """Convert Celsius to Fahrenheit."""
     return c * (9 / 5) + 32
 
 
 def f_to_c(f):
-    """Convert Fahrenheit to Celcius."""
+    """Convert Fahrenheit to Celsius."""
     return (f - 32) * 5 / 9
 
 
@@ -117,7 +117,8 @@ def bootstrap_power_setting_parameter(
     Args:
         engine_torque: :math:`M`, engine torque in ft-lbf.
         altitude_power_dropoff_factor: :math:`\phi`, engine torque/power dropoff factor.
-        base_engine_torque: :math:`M_B`, base MSL-rated torque at full throttle in ft-lbf.
+        base_engine_torque: :math:`M_B`, base MSL-rated torque at full throttle in
+        ft-lbf.
 
     Returns:
         :math:`Π`, bootstrap power-setting parameter.
@@ -136,7 +137,7 @@ def sdef_t(z_ratio):
     Returns:
         :math:`{SDEF}`, slowdown efficiency factor for the tractor propeller.
     """
-    return 1.05263 - 0.00722 * z_ratio - 0.16462 * z_ratio ** 2 - 0.18341 * z_ratio ** 3
+    return 1.05263 - 0.00722 * z_ratio - 0.16462 * z_ratio**2 - 0.18341 * z_ratio**3
 
 
 def propeller_advance_ratio(air_speed, propeller_rps, propeller_diameter):
@@ -172,12 +173,12 @@ def propeller_power_coefficient(
         :math:`C_P`, propeller power coefficient.
     """
     return power / (
-        atmospheric_density * (propeller_rps ** 3) * (propeller_diameter ** 5)
+        atmospheric_density * (propeller_rps**3) * (propeller_diameter**5)
     )
 
 
 def power_adjustment_factor_x(total_activity_factor):
-    """Power adjusment factor :math:`X` for your propeller depends on its TAF
+    """Power adjustment factor :math:`X` for your propeller depends on its TAF
     according to the (curve-fit) formula:
 
     :math:`X = 0.001515 {TAF} - 0.0880`
@@ -205,7 +206,7 @@ def H(
     wing_aspect_ratio,
 ):
     """Calculate composite bootstrap parameter :math:`H`."""
-    return (2 * gross_aircraft_weight ** 2) / (
+    return (2 * gross_aircraft_weight**2) / (
         atmospheric_density
         * reference_wing_area
         * math.pi
@@ -218,7 +219,7 @@ def power_required(g, h, air_speed):
     """Determine power required :math:`P_{re}` to overcome the total drag force
     at air speed :math:`V`."""
     # $P_{re} = {GV}^3 + H/V$
-    return g * air_speed ** 3 + h / air_speed
+    return g * air_speed**3 + h / air_speed
 
 
 def power_available(eta, power):

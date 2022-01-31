@@ -120,4 +120,4 @@ class PartialThrottleConditions(Conditions):
 
     @property
     def desc(self):
-        return f"Partial Throttle"
+        return "Partial Throttle"

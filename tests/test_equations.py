@@ -21,7 +21,7 @@ class TestEquations(unittest.TestCase):
                 atmospheric_density(0.88808),
                 0.002111,
                 # of 4 significant digits
-                abs_tol=10 ** -6,
+                abs_tol=10**-6,
             )
         )
 
@@ -33,7 +33,7 @@ class TestEquations(unittest.TestCase):
                 * 235,
                 235,
                 # of 0 significant digits
-                abs_tol=10 ** -0,
+                abs_tol=10**-0,
             )
         )
         self.assertTrue(
@@ -44,7 +44,7 @@ class TestEquations(unittest.TestCase):
                 * 235,
                 122,
                 # of 0 significant digits
-                abs_tol=10 ** -0,
+                abs_tol=10**-0,
             )
         )
 
@@ -55,7 +55,7 @@ class TestEquations(unittest.TestCase):
                 sdef_t(0.688),
                 0.910,
                 # of 3 significant digits
-                abs_tol=10 ** -3,
+                abs_tol=10**-3,
             )
         )
 
@@ -66,7 +66,7 @@ class TestEquations(unittest.TestCase):
                 propeller_advance_ratio(253.2, 2400 / 60, 7),
                 0.9043,
                 # of 4 significant digits
-                abs_tol=10 ** -4,
+                abs_tol=10**-4,
             )
         )
 
@@ -77,7 +77,7 @@ class TestEquations(unittest.TestCase):
                 propeller_power_coefficient(200 * 550, 0.002048, 2400 / 60, 7),
                 0.04993,
                 # of 5 significant digits
-                abs_tol=10 ** -5,
+                abs_tol=10**-5,
             )
         )
 
@@ -88,7 +88,7 @@ class TestEquations(unittest.TestCase):
                 power_adjustment_factor_x(195.9),
                 0.2088,
                 # of 4 significant digits
-                abs_tol=10 ** -4,
+                abs_tol=10**-4,
             )
         )
 

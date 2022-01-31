@@ -1,3 +1,5 @@
+import math
+
 import numpy as np
 
 from the_bootstrap_approach.conditions import (
@@ -6,7 +8,16 @@ from the_bootstrap_approach.conditions import (
     PartialThrottleConditions,
 )
 from the_bootstrap_approach.dataplate import DataPlate
-from the_bootstrap_approach.equations import *
+from the_bootstrap_approach.equations import (
+    tas,
+    kn_to_fts,
+    sdef_t,
+    propeller_advance_ratio,
+    propeller_power_coefficient,
+    power_adjustment_factor_x,
+    power_required,
+    power_available,
+)
 from the_bootstrap_approach.propeller_chart import propeller_efficiency
 
 
@@ -46,8 +57,12 @@ def bootstrap_cruise_performance_table(
     # as thrust goes down, but pav remains the same (e.g., 65% power), KTAS goes up! :O
     # this is because more of it just goes straight into VT
     # ktas(vt) = pre / drag
-    # as drag goes down, but power required to overcome the drag force remains the same (e.g., 65% power), KTAS goes up! :O
-    # if drag went down, how does power required to overcome the drag force remain the same?
+
+    # as drag goes down, but power required to overcome the drag force remains the same
+    # (e.g., 65% power), KTAS goes up! :O
+
+    # if drag went down, how does power required to overcome the drag force remain the
+    # same?
 
     thrust = pav / vt
     drag = pre / vt
@@ -75,7 +90,24 @@ def bootstrap_cruise_performance_table(
 
     if expanded:
         return np.column_stack(
-            (kcas, ktas, eta, thrust, drag, roc, aoc, ftnm, pre, pav, pxs, rpm, pbhp, gph, fuel_flow_per_knot, mpg)
+            (
+                kcas,
+                ktas,
+                eta,
+                thrust,
+                drag,
+                roc,
+                aoc,
+                ftnm,
+                pre,
+                pav,
+                pxs,
+                rpm,
+                pbhp,
+                gph,
+                fuel_flow_per_knot,
+                mpg,
+            )
         )
     else:
         return np.column_stack(
@@ -150,8 +182,8 @@ def best_range_and_optimum_cruise(
             roc = table[:, 3]
             index_of_highest_roc = roc.argmax()
 
-            # V_m, minimum level flight speed (in practice, Vm seldom occurs, because the
-            # power-on stall speed is usually much higher).
+            # V_m, minimum level flight speed (in practice, Vm seldom occurs, because
+            # the power-on stall speed is usually much higher).
             roc_before_peak = roc[:index_of_highest_roc]
             if roc_before_peak.size > 0:
                 index_min_level_flight_speed = np.where(

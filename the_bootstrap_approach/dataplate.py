@@ -25,7 +25,7 @@ class DataPlate:
         # B, wing span (ft).
         self.wing_span = wing_span
         # A, wing aspect ratio (span^2/S).
-        self.wing_aspect_ratio = wing_span ** 2 / reference_wing_area
+        self.wing_aspect_ratio = wing_span**2 / reference_wing_area
         # C_{D0}, parasite drag coefficient (depends on flaps/gear configuration).
         self.parasite_drag_coefficient = parasite_drag_coefficient
         # e, airplane efficiency factor (possibly depends on flaps configuration).
