@@ -49,6 +49,7 @@ def bootstrap_cruise_performance_table(
         power_adjustment_factor_x(dataplate.total_activity_factor),
     )
 
+    # Where G * V^2 is parasite drag (D_p) and H / V^2 is induced drag (D_i).
     pre = power_required(operating_conditions.g, operating_conditions.h, vt)
     pav = power_available(eta, operating_conditions.power)
     pxs = pav - pre
