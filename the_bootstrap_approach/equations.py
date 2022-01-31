@@ -99,14 +99,39 @@ def f_to_c(f):
     return (f - 32) * 5 / 9
 
 
-def t_isa(pressure_altitude):
-    """Get ISA temperature :math:`T` in °C for :math:`h_p`."""
-    return 15 - 1.98 * (pressure_altitude / 1000)
+def british_standard_temperature(altitude):
+    """Get standard temperature :math:`T_S(h)` at altitude :math:`h` above mean
+    sea level.
+
+    Args:
+        altitude: :math:`h`, any altitude above mean sea level.
+
+    Returns:
+        :math:`T_S(h)`, standard temperature in British engineering units, °F.
+
+    """
+    return 59 - 0.003566 * altitude
+
+
+def metric_standard_temperature(altitude):
+    """Get standard temperature :math:`T_S(h)` at altitude :math:`h` above mean
+    sea level.
+
+    Args:
+        altitude: :math:`h`, any altitude above mean sea level.
+
+    Returns:
+        :math:`T_S(h)`, standard temperature in metric units, °C.
+
+    """
+    return 15 - 0.001981 * altitude
 
 
 def density_altitude(pressure_altitude, oat_f):
     """Get density altitude :math:`h_ρ` from :math:`h_p` and OAT°F."""
-    return (f_to_c(oat_f) - t_isa(pressure_altitude)) * 118.8 + pressure_altitude
+    return (
+        f_to_c(oat_f) - metric_standard_temperature(pressure_altitude)
+    ) * 118.8 + pressure_altitude
 
 
 def bootstrap_power_setting_parameter(

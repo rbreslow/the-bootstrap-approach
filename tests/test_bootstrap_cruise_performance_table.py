@@ -3,7 +3,7 @@ import math
 
 from the_bootstrap_approach.conditions import PartialThrottleConditions
 from the_bootstrap_approach.dataplate import DataPlate
-from the_bootstrap_approach.equations import c_to_f
+from the_bootstrap_approach.equations import british_standard_temperature
 from the_bootstrap_approach.mixture import Mixture
 from the_bootstrap_approach.performance import bootstrap_cruise_performance_table
 
@@ -44,7 +44,7 @@ class TestBootstrapCruisePerformanceTable(unittest.TestCase):
             self.dataplate,
             3100,
             8000,
-            c_to_f(15 - (8000 / 1000 * 2)),
+            british_standard_temperature(8000),
             Mixture.BEST_POWER,
             2300,
             235 * 0.65 * 550,

@@ -32,10 +32,11 @@ Pretty close!
 
 ## References
 
-1.	J. T. Lowry, Performance of Light Aircraft. Reston, VA: American Institute of Aeronautics & Astronautics, 1999.
+1. J. T. Lowry, Performance of Light Aircraft. Reston, VA: American Institute of Aeronautics & Astronautics, 1999.
 1. J. T. Lowry, Computing Airplane Performance with The Bootstrap Approach: A Field Guide. Billings, MT: Flight Physics, 1995.
 1. J. T. Lowry, “The Bootstrap Approach to Aircraft Performance (Part One – Fixed-Pitch Propeller Airplanes),” AVweb, 08-Dec-1999. [Online]. Available: https://www.avweb.com/features_old/the-bootstrap-approach-to-aircraft-performancepart-one-fixed-pitch-propeller-airplanes/.
 1. J. T. Lowry, “The Bootstrap Approach to Aircraft Performance (Part Two – Constant-Speed Propeller Airplanes),” AVweb, 12-Dec-1999. [Online]. Available: https://www.avweb.com/features_old/the-bootstrap-approach-to-aircraft-performancepart-two-constant-speed-propeller-airplanes/.
 1. “O-540 & IO-540 Operator’s Manual,” Lycoming Engines, Williamsport, PA, Mar. 2009.
 1. “Dakota Pilot’s Operating Handbook and FAA Approved Airplane Flight Manual,” Piper Aircraft Corporation, Vero Beach, FL, Jun. 1978.
 1. J. Yates, “Predicting Performance,” KITPLANES, 19-Feb-2015. [Online]. Available: https://www.kitplanes.com/predicting-performance/.
+1. Federal Aviation Administration, Pilot’s Handbook of Aeronautical Knowledge. Oklahoma City, OK: United States Department of Transportation, Federal Aviation Administration, Airman Testing Standards Branch, 2016.
