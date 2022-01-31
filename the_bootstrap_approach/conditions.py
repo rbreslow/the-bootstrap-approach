@@ -1,7 +1,14 @@
 from abc import ABC, abstractmethod
+import math
 
 from the_bootstrap_approach.dataplate import DataPlate
-from the_bootstrap_approach.equations import *
+from the_bootstrap_approach.equations import (
+    G,
+    H,
+    density_altitude,
+    atmospheric_density,
+    altitude_power_dropoff_factor,
+)
 from the_bootstrap_approach.mixture import Mixture
 
 
@@ -50,10 +57,6 @@ class Conditions(ABC):
         pass
 
     @property
-    def torque(self):
-        return engine_torque(self.power, self.propeller_rps)
-
-    @property
     def propeller_rps(self):
         return self.engine_rpm / 60
 
@@ -70,6 +73,20 @@ class Conditions(ABC):
 
 
 class FullThrottleConditions(Conditions):
+    @property
+    def torque(self):
+        # "Full-throttle torque depends on air density via
+        # $M(\sigma) = \phi(\sigma)M_0 = \frac{(\sigma - C)}{(1 - C)}M_0$
+        # where C is a number close to 0.12, giving the proportion of internal
+        # engine losses not responsive to air density." [1, p. 231]
+        return (
+            altitude_power_dropoff_factor(
+                self.relative_atmospheric_density,
+                self.dataplate.engine_power_altitude_dropoff_parameter,
+            )
+            * self.dataplate.rated_full_throttle_engine_torque
+        )
+
     @property
     def power(self):
         return (
