@@ -1,7 +1,11 @@
+.DS_Store
 .vscode
-venv
+.venv
 __pycache__
 *.pyc
 .coverage
 htmlcov
 coverage.xml
+*.egg-info
+.tox
+.idea

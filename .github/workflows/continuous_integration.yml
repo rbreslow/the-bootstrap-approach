@@ -25,12 +25,14 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ~/.cache/pip
-          key: pip-${{ hashFiles('requirements.txt') }}
+          key: pip-${{ hashFiles('setup.cfg') }}-${{ hashFiles('tox.ini') }}
           restore-keys: pip-
 
-      - run: ./scripts/update
+      - name: Install Dependencies
+        run: pip install -e ".[tests]"
 
-      - run: ./scripts/test
+      - name: Run Tests
+        run: tox
 
       - name: Upload Coverage to Codecov
         uses: codecov/codecov-action@v2
