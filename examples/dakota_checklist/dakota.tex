@@ -1,0 +1,88 @@
+\documentclass{article}
+\usepackage{geometry}
+    \geometry{
+        a5paper,
+        portrait,
+        % The Jeppesen plate appears to be closer to 0.25in. I think
+        % that 0.5in is looking best for checklists.
+        margin=0.5in,
+        % I decided arbitrarily on these values to maximize margins,
+        % headers, and content in one page (and satisfy fancyhdr).
+        % https://tex.stackexchange.com/questions/132170/what-do-headheight-headsep-etc-do-in-the-vmargin-package
+        headsep=12pt,
+        footskip=12pt,
+        includehead,
+        includefoot
+    }
+% NASA says:
+% > The horizontal spacing between characters should be 25% of the
+% > overall size and not less than one stroke width.
+%
+% The microtype documentation says:
+% > Letterspaced fonts for which settings don’t exist will be spaced out
+% > by the default of 0.1 em [...]
+% AND
+% > The amount is specified in thousandths of 1 em [...]
+%
+% So, we're scaling the default spacing by 25%, and then converting to
+% housandths of an em (0.1 * 1000 * .25).
+\usepackage[letterspace=25]{microtype}
+% Used for the checklist frames.
+\usepackage{tcolorbox}
+% For the preflight checklist square.
+\usepackage{amssymb}
+% For finer control over multi-column layouts.
+\usepackage{multicol}
+% For finer control over headers and footers.
+\usepackage{fancyhdr}
+% Used for performance charts.
+\usepackage{booktabs}
+% Used for degree symbol.
+\usepackage{gensymb}
+% Used for clickable ToC links.
+\usepackage{hyperref}
+% Used to embed Python code within LaTeX.
+\usepackage{pythontex} 
+% Used for local table of contents.
+\usepackage{etoc}
+% Used for tables that extend across multiple pages.
+\usepackage{longtable}
+% Helps the table of contents refresh when using PythonTex.
+\usepackage{bookmark}
+
+% This is a macro that formats the checklist items and adds a new line.
+\def\checkitem#1#2{
+    #1\dotfill#2
+
+}
+
+% Set the default font family to sans-serif.
+\renewcommand{\familydefault}{\sfdefault}
+
+% NASA says:
+% > The vertical spacing between lines should not be smaller than 25-33%
+% > of the overall size of the font.
+\renewcommand{\baselinestretch}{1.25}
+
+% Configure the header and footer.
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\rightmark}
+\rhead{Piper PA-28-236}
+\rfoot{\thepage}
+\begin{document}
+
+% Apply microtype tracking adjustments.
+\lsstyle
+
+% [...] you can say \raggedcolumns if you don’t want the bottom lines to
+% be aligned. The default is \flushcolumns, so TEX will normally try to
+% make both the top and bottom baselines of all columns align.
+\raggedcolumns
+
+\include{dakota.preflight_checklist.tex}
+\include{dakota.normal_procedures.tex}
+\include{dakota.emergency_procedures.tex}
+\include{dakota.performance_charts.tex}
+
+\end{document}
