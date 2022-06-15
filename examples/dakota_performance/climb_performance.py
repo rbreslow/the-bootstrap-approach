@@ -7,7 +7,7 @@ from the_bootstrap_approach.conditions import Conditions, FullThrottleConditions
 from the_bootstrap_approach.dataplate import DataPlate
 from the_bootstrap_approach.equations import metric_standard_temperature, c_to_f
 from the_bootstrap_approach.mixture import Mixture
-from the_bootstrap_approach.performance import bootstrap_cruise_performance_table
+from the_bootstrap_approach.performance import bootstrap_cruise_performance_table, INDEX_ROC
 
 
 def best_angle_of_climb(dataplate: DataPlate, operating_conditions: Conditions):
@@ -68,7 +68,7 @@ def climb_profile_tex(profile, gross_aircraft_weight, isa_diff):
 \pagebreak"""
 
 
-def best_rate_of_climb_tex(gross_aircraft_weight, isa_diff=0):
+def best_rate_of_climb_profile(gross_aircraft_weight=3000, isa_diff=0):
     profile = []
     pressure_altitude = 0
 
@@ -87,17 +87,22 @@ def best_rate_of_climb_tex(gross_aircraft_weight, isa_diff=0):
             ),
         )
 
-        if row[4] > 0:
+        if row[INDEX_ROC] > 0:
             profile.append(np.insert(row, 0, pressure_altitude))
-
             pressure_altitude += 1000
         else:
             break
 
-    return climb_profile_tex(profile, gross_aircraft_weight, isa_diff)
+    return profile
 
 
-def cruise_climb_tex(gross_aircraft_weight, isa_diff=0):
+def best_rate_of_climb_tex(gross_aircraft_weight, isa_diff=0):
+    return climb_profile_tex(
+        best_rate_of_climb_profile(gross_aircraft_weight, isa_diff), gross_aircraft_weight, isa_diff
+    )
+
+
+def cruise_climb_profile(gross_aircraft_weight=3000, isa_diff=0):
     profile = []
 
     pressure_altitude = 0  # starting pressure altitude
@@ -116,11 +121,16 @@ def cruise_climb_tex(gross_aircraft_weight, isa_diff=0):
             ),
         )
 
-        if row[4] > 0:
+        if row[INDEX_ROC] > 0:
             profile.append(np.insert(row, 0, pressure_altitude))
-
             pressure_altitude += 1000
         else:
             break
 
-    return climb_profile_tex(profile, gross_aircraft_weight, isa_diff)
+    return profile
+
+
+def cruise_climb_tex(gross_aircraft_weight, isa_diff=0):
+    return climb_profile_tex(
+        cruise_climb_profile(gross_aircraft_weight, isa_diff), gross_aircraft_weight, isa_diff
+    )

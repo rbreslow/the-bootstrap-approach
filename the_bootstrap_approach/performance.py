@@ -20,6 +20,18 @@ from the_bootstrap_approach.equations import (
 from the_bootstrap_approach.propeller_chart import propeller_efficiency
 
 
+INDEX_KCAS = 0
+INDEX_KTAS = 1
+INDEX_ETA = 2
+INDEX_ROC = 3
+INDEX_FTNM = 4
+INDEX_RPM = 5
+INDEX_PHBP = 6
+INDEX_GPH = 7
+INDEX_FUEL_FLOW_PER_KNOT = 8
+INDEX_MPG = 9
+
+
 def bootstrap_cruise_performance_table(
     dataplate: DataPlate,
     operating_conditions: Conditions,

@@ -10,11 +10,11 @@ from the_bootstrap_approach.conditions import (
 from the_bootstrap_approach.dataplate import DataPlate
 from the_bootstrap_approach.equations import metric_standard_temperature, c_to_f
 from the_bootstrap_approach.mixture import Mixture
-from the_bootstrap_approach.performance import bootstrap_cruise_performance_table
+from the_bootstrap_approach.performance import bootstrap_cruise_performance_table, INDEX_ROC
 
 
 def best_range_and_optimum_cruise(
-    dataplate: DataPlate, gross_aircraft_weight, pressure_altitude, oat_f, mixture
+        dataplate: DataPlate, gross_aircraft_weight, pressure_altitude, oat_f, mixture
 ):
     """Determine Vbr and Vcr (?), best range and optimum cruise conditions."""
     best_range_candidates = []
@@ -82,9 +82,9 @@ def best_range_and_optimum_cruise(
             # Fuel Flow / knot (where this parameter is at a minimum we've found
             # Carson's speed).
             fuel_flow_per_knot = table[:, 8][
-                index_min_level_flight_speed : index_of_highest_roc
-                + index_max_level_flight_speed
-            ]
+                                 index_min_level_flight_speed: index_of_highest_roc
+                                                               + index_max_level_flight_speed
+                                 ]
 
             # We can't consider any negative ROCs.
             for idx, _ in enumerate(fuel_flow_per_knot):
@@ -113,7 +113,7 @@ def best_range_and_optimum_cruise(
 
 
 def sixty_five_percent_power_thence_wot(
-    dataplate: DataPlate, gross_aircraft_weight, pressure_altitude, oat_f, mixture
+        dataplate: DataPlate, gross_aircraft_weight, pressure_altitude, oat_f, mixture
 ):
     # TODO: We want RPM to be 2200 because of initial smoothness, but once you
     # get to 17,000ft, you want to be cruising at 2400 RPM for max power. When
@@ -167,7 +167,7 @@ def sixty_five_percent_power_thence_wot(
     return table[index_of_highest_roc + index_max_level_flight_speed]
 
 
-def best_range_tex(gross_aircraft_weight, isa_diff=0):
+def best_range_profile(gross_aircraft_weight, isa_diff=0):
     profile = []
     pressure_altitude = 0
 
@@ -182,14 +182,17 @@ def best_range_tex(gross_aircraft_weight, isa_diff=0):
             Mixture.BEST_ECONOMY,
         )[0]
 
-        # Make pressure_altitude the independent variable.
-        row = np.insert(row, 0, pressure_altitude)
-
-        if row[4] > 0:
-            profile.append(row)
+        if row[INDEX_ROC] > 0:
+            profile.append(np.insert(row, 0, pressure_altitude))
             pressure_altitude += 1000
         else:
             break
+
+    return profile
+
+
+def best_range_tex(gross_aircraft_weight, isa_diff=0):
+    profile = best_range_profile(gross_aircraft_weight, isa_diff)
 
     table = tabulate(
         np.delete(profile, [4, 5, 9], axis=1),
@@ -224,7 +227,7 @@ def best_range_tex(gross_aircraft_weight, isa_diff=0):
 \pagebreak"""
 
 
-def sixty_five_percent_power_thence_wot_tex(gross_aircraft_weight, isa_diff=0):
+def sixty_five_percent_power_thence_wot_profile(gross_aircraft_weight, isa_diff=0):
     profile = []
     pressure_altitude = 0
 
@@ -239,14 +242,17 @@ def sixty_five_percent_power_thence_wot_tex(gross_aircraft_weight, isa_diff=0):
             Mixture.BEST_POWER,
         )
 
-        # Make pressure_altitude the independent variable.
-        row = np.insert(row, 0, pressure_altitude)
-
-        if row[4] > 0:
-            profile.append(row)
+        if row[INDEX_ROC] > 0:
+            profile.append(np.insert(row, 0, pressure_altitude))
             pressure_altitude += 1000
         else:
             break
+
+    return profile
+
+
+def sixty_five_percent_power_thence_wot_tex(gross_aircraft_weight, isa_diff=0):
+    profile = sixty_five_percent_power_thence_wot_profile(gross_aircraft_weight, isa_diff)
 
     table = tabulate(
         np.delete(profile, [4, 5, 9], axis=1),
