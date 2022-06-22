@@ -71,6 +71,15 @@ class Conditions(ABC):
         full throttle)."""
         pass
 
+    @property
+    def leaning_effect_on_shaft_power_output(self):
+        if self.mixture == Mixture.BEST_ECONOMY:
+            return 0.93
+        elif self.mixture == Mixture.BEST_POWER:
+            return 1
+        elif self.mixture == Mixture.FULL_RICH:
+            return 0.9681
+
 
 class FullThrottleConditions(Conditions):
     @property
@@ -97,7 +106,7 @@ class FullThrottleConditions(Conditions):
             * self.dataplate.rated_full_throttle_engine_torque
             # Then, we factor in the losses from Best Economy operation
             # (approximated from the O-540 operator's manual).
-            * (0.945 if self.mixture == Mixture.BEST_ECONOMY else 1)
+            * self.leaning_effect_on_shaft_power_output
             # Finally, we can factor in power losses at altitude.
             * altitude_power_dropoff_factor(
                 self.relative_atmospheric_density,
