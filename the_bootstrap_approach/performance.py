@@ -1,10 +1,12 @@
 import math
+from dataclasses import dataclass
+from enum import IntEnum
 
 import numpy as np
+import numpy.typing as npt
 
 from the_bootstrap_approach.conditions import (
     Conditions,
-    FullThrottleConditions,
 )
 from the_bootstrap_approach.dataplate import DataPlate
 from the_bootstrap_approach.equations import (
@@ -16,32 +18,52 @@ from the_bootstrap_approach.equations import (
     power_adjustment_factor_x,
     power_required,
     power_available,
+    metric_standard_temperature,
+    c_to_f,
+    fuel_lbf_to_gal,
+    ft_lbfs_to_hp,
 )
 from the_bootstrap_approach.propeller_chart import propeller_efficiency
 
 
-INDEX_KCAS = 0
-INDEX_KTAS = 1
-INDEX_ETA = 2
-INDEX_ROC = 3
-INDEX_FTNM = 4
-INDEX_RPM = 5
-INDEX_PHBP = 6
-INDEX_GPH = 7
-INDEX_FUEL_FLOW_PER_KNOT = 8
-INDEX_MPG = 9
+class ByKCASRowIndex(IntEnum):
+    KCAS = 0
+    KTAS = 1
+    PROPELLER_EFFICIENCY = 2
+    RATE_OF_CLIMB = 3
+    ANGLE_OF_CLIMB = 4
+    RPM = 5
+    PBHP = 6
+    GPH = 7
+    FUEL_FLOW_PER_KNOT = 8
+    MPG = 9
+
+
+class ByAltitudeRowIndex(IntEnum):
+    PRESSURE_ALTITUDE = 0
+    KCAS = 1
+    KTAS = 2
+    PROPELLER_EFFICIENCY = 3
+    RATE_OF_CLIMB = 4
+    ANGLE_OF_CLIMB = 5
+    RPM = 6
+    PBHP = 7
+    GPH = 8
+    FUEL_FLOW_PER_KNOT = 9
+    MPG = 10
 
 
 def bootstrap_cruise_performance_table(
     dataplate: DataPlate,
     operating_conditions: Conditions,
-    min,
-    max,
+    start,
+    stop,
     step,
     expanded=False,
-):
-    kcas = np.arange(min, max, step)
-    ktas = tas(kcas, operating_conditions.relative_atmospheric_density)
+    headwind=0,
+) -> np.ndarray:
+    kcas = np.arange(start, stop, step)
+    ktas = tas(kcas, operating_conditions.relative_atmospheric_density) + headwind
     vt = kn_to_fts(ktas)
 
     eta = propeller_efficiency(
@@ -74,17 +96,19 @@ def bootstrap_cruise_performance_table(
     )
     ftnm = roc / (ktas / 60)
 
-    rpm = np.full(len(kcas), operating_conditions.engine_rpm)
-    if type(operating_conditions) == FullThrottleConditions:
-        # %bhp and GPH at full throttle for these operating conditions.
-        # TODO: What happens if someone brings RPM back? Does this still work?
-        # Or, since we're already multiplying by ETA, are we all good?
-        pbhp = ((pav / eta) / dataplate.rated_full_throttle_engine_power) * 100
-        gph = (operating_conditions.bsfc * (pav / eta) / 550) / 6
-    else:
-        # %bhp and GPH required to maintain level flight at this TAS.
-        pbhp = ((pre / eta) / dataplate.rated_full_throttle_engine_power) * 100
-        gph = (operating_conditions.bsfc * (pre / eta) / 550) / 6
+    # Divide by 550 ft-lbf/s to get brake horsepower (BHP).
+    power = np.full(kcas.size, operating_conditions.power)
+
+    rpm = np.full(kcas.size, operating_conditions.engine_rpm)
+    pbhp = (power / dataplate.rated_full_throttle_engine_power) * 100
+
+    # The volume of aviation fuel varies with air density [8, p. 9-14].
+    gph = fuel_lbf_to_gal(
+        # bsfc is measured in lbs./BHP./hr. So, bsfc * BHP yields fuel lbs./hr.
+        operating_conditions.bsfc * ft_lbfs_to_hp(power),
+        operating_conditions.oat_f,
+    )
+
     fuel_flow_per_knot = thrust / vt
     mpg = ktas / gph
 
@@ -113,3 +137,34 @@ def bootstrap_cruise_performance_table(
         return np.column_stack(
             (kcas, ktas, eta, roc, ftnm, rpm, pbhp, gph, fuel_flow_per_knot, mpg)
         )
+
+
+@dataclass(frozen=True)
+class PerformanceProfile:
+    name: str
+    dataplate: DataPlate
+    gross_aircraft_weight: float
+    isa_diff: float
+    data: npt.NDArray[npt.NDArray[np.float64]]
+
+
+def by_altitude_profile(
+    func: callable, isa_diff: float = 0
+) -> npt.NDArray[npt.NDArray[np.float64]]:
+    profile = []
+    pressure_altitude = 0
+
+    while True:
+        oat_c = metric_standard_temperature(pressure_altitude) + isa_diff
+
+        row = func(pressure_altitude, c_to_f(oat_c))
+
+        if row is not None and row[ByKCASRowIndex.RATE_OF_CLIMB] > 0:
+            profile.append(np.insert(row, 0, pressure_altitude))
+            pressure_altitude += 1000
+        else:
+            # The aircraft isn't sustaining level flight if the rate of climb
+            # is negative, so we know we've reached absolute ceiling.
+            break
+
+    return np.array(profile)

@@ -261,3 +261,25 @@ def cas(tas, relative_atmospheric_density):
 
 def kn_to_fts(kn):
     return kn / 0.5924838
+
+
+def fuel_gal_to_lbf(fuel_gal, oat_f):
+    """Convert gallons per hour of AvGas to pounds per hour, considering
+    temperature variation."""
+    # For 100/130 aviation gasoline: Fuel lbf/U.S. gall = 6.077 - 0.00409 x °F.
+    # [1, p. 122].
+    fuel_lbf_per_gal = 6.077 - (0.00409 * oat_f)
+    return fuel_gal * fuel_lbf_per_gal
+
+
+def fuel_lbf_to_gal(fuel_lbf, oat_f):
+    """Convert pounds per hour of AvGas to gallons per hour per, considering
+    temperature variation."""
+    # For 100/130 aviation gasoline: Fuel lbf/U.S. gall = 6.077 - 0.00409 x °F.
+    # [1, p. 122].
+    fuel_lbf_per_gal = 6.077 - (0.00409 * oat_f)
+    return fuel_lbf / fuel_lbf_per_gal
+
+
+def ft_lbfs_to_hp(ft_lbfs):
+    return ft_lbfs / 550
