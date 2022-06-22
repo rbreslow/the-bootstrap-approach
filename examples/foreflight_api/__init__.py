@@ -1,5 +1,7 @@
 import json
 import os
+from typing import Any, Optional
+from uuid import UUID
 
 import requests as requests
 
@@ -15,16 +17,16 @@ if None in (cookies["fosoc2"], cookies["ffsession"]):
 
 
 def create_profile(
-    account_uuid,
-    metadata_oid,
-    aircraft_oid,
-    aircraft_uuid,
-    performance_profile_name,
-    detailed_performance_model,
-):
+    account_uuid: UUID,
+    metadata_oid: str,
+    aircraft_oid: str,
+    aircraft_uuid: UUID,
+    performance_profile_name: str,
+    detailed_performance_model: dict[str, Any],
+) -> None:
     try:
         response = requests.post(
-            url=f"https://plan.foreflight.com/api/1/aircraft/performance/custom/{account_uuid}",
+            url=f"https://plan.foreflight.com/api/1/aircraft/performance/custom/{account_uuid}",  # noqa
             cookies=cookies,
             data=json.dumps(
                 {
@@ -32,7 +34,7 @@ def create_profile(
                     "type": "Detailed",
                     "performanceProfileName": performance_profile_name,
                     "aircraftOid": aircraft_oid,
-                    "aircraftUUID": aircraft_uuid,
+                    "aircraftUUID": str(aircraft_uuid),
                     "climbProfileUUID": None,
                     "performanceProfileClimbName": None,
                     "cruiseProfileUUID": None,
@@ -53,25 +55,30 @@ def create_profile(
         print(f"HTTP Request failed: {e}")
 
 
-def get_aircraft(account_uuid, aircraft_uuid):
+def get_aircraft(account_uuid: UUID, aircraft_uuid: UUID) -> Optional[dict[str, Any]]:
     try:
         response = requests.get(
-            # other documented url params: "&withLastFlightDate=true&includeSharedObjects=true&withFieldPerfModels=true"
-            url=f"https://plan.foreflight.com/api/1/aircraft?with_profiles=true&accountUuid={account_uuid}",
+            # other documented url params:
+            # - withLastFlightDate=true
+            # - includeSharedObjects=true
+            # - withFieldPerfModels=true
+            url=f"https://plan.foreflight.com/api/1/aircraft?with_profiles=true&accountUuid={account_uuid}",  # noqa
             cookies=cookies,
         )
 
         data = response.json()
 
-        # If you've ever received a shared flight plan from someone (e.g., your buddy or flight instructor) then you'll
-        # have multiple aircraft with the same UUID. So, you need to filter by account UUID as well.
+        # If you've ever received a shared flight plan from someone (e.g., your
+        # buddy or flight instructor) then you'll have multiple aircraft with
+        # the same UUID. So, you need to filter by account UUID as well.
         search = [
             aircraft
             for aircraft in data["aircraft"]
-            if aircraft["accountUuid"] == account_uuid
-            and aircraft["aircraftUUID"] == aircraft_uuid
+            if UUID(aircraft["accountUuid"]) == account_uuid
+            and UUID(aircraft["aircraftUUID"]) == aircraft_uuid
         ]
-        # There should only be one aircraft in your account with the same tail number.
+        # There should only be one aircraft in your account with the same tail
+        # number.
         assert len(search) == 1
 
         return search[0]

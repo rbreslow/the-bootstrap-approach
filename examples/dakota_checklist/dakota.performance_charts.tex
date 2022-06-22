@@ -5,40 +5,44 @@
 \subsection{Best Rate of Climb}
 
 \begin{pycode}
-from examples.dakota_performance.climb_performance import best_rate_of_climb_tex
+from examples.n51sw_dataplate import N51SW
+from examples.dakota_performance import best_rate_of_climb
+from examples.dakota_performance.latex import climb_profile_tex
 
 for gross_aircraft_weight in (2250, 2500, 2750, 3000):
     for isa_diff in (-20, -10, 0, 10, 20):
-        table = best_rate_of_climb_tex(gross_aircraft_weight, isa_diff)
-        print(table)
+        climb_profile = best_rate_of_climb(N51SW, gross_aircraft_weight, isa_diff)
+        print(climb_profile_tex(climb_profile))
 \end{pycode}
 
 \subsection{Cruise Climb}
 
 \begin{pycode}
-from examples.dakota_performance.climb_performance import cruise_climb_tex
+from examples.n51sw_dataplate import N51SW
+from examples.dakota_performance import cruise_climb
+from examples.dakota_performance.latex import climb_profile_tex
 
 for gross_aircraft_weight in (2250, 2500, 2750, 3000):
     for isa_diff in (-20, -10, 0, 10, 20):
-        table = cruise_climb_tex(gross_aircraft_weight, isa_diff)
-        print(table)
+        climb_profile = cruise_climb(N51SW, gross_aircraft_weight, isa_diff)
+        print(climb_profile_tex(climb_profile))
 \end{pycode}
 
-% \subsection{Best Range}
+\subsection{Best Range}
 
-% \begin{pycode}
-% from examples.dakota_performance.cruise_performance import best_range_tex
+\begin{pycode}
+from examples.dakota_performance.latex import best_range_tex
 
-% for gross_aircraft_weight in (2500, 3000):
-%     for isa_diff in (-10, 0, 10):
-%         table = best_range_tex(gross_aircraft_weight, isa_diff)
-%         print(table)
-% \end{pycode}   
+for gross_aircraft_weight in (2250, 2500, 2750, 3000):
+    for isa_diff in (-20, -10, 0, 10, 20):
+         table = best_range_tex(gross_aircraft_weight, isa_diff)
+         print(table)
+\end{pycode}
 
 \subsection{65\% Power Thence Full Throttle}
 
 \begin{pycode}
-from examples.dakota_performance.cruise_performance import sixty_five_percent_power_thence_wot_tex
+from examples.dakota_performance.latex import sixty_five_percent_power_thence_wot_tex
 
 for gross_aircraft_weight in (2250, 2500, 2750, 3000):
     for isa_diff in (-20, -10, 0, 10, 20):

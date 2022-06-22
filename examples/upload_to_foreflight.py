@@ -1,31 +1,37 @@
 """
-Small CLI to create custom ForeFlight performance profiles using Bootstrap Approach data. Requires that you extract
-cookies from a plan.foreflight.com browser session.
+Small CLI to create custom ForeFlight performance profiles using Bootstrap
+Approach data. Requires that you extract cookies from a plan.foreflight.com
+browser session.
 """
-
 import os
 import sys
+from typing import Optional, Any
+from uuid import UUID
 
-from examples.dakota_performance.climb_performance import cruise_climb_profile, best_rate_of_climb_profile
-from examples.dakota_performance.cruise_performance import sixty_five_percent_power_thence_wot_profile, \
-    best_range_profile
+import numpy as np
+import numpy.typing as npt
+
+from examples.dakota_performance import cruise_climb, sixty_five_percent_power
+from examples.dakota_performance.best_range import best_range
 from examples.foreflight_api import get_aircraft, create_profile
-from the_bootstrap_approach.equations import british_standard_temperature
-from the_bootstrap_approach.performance import INDEX_GPH, INDEX_KTAS, INDEX_ROC, INDEX_KCAS
+from examples.n51sw_dataplate import N51SW
+from the_bootstrap_approach.equations import (
+    british_standard_temperature,
+    fuel_gal_to_lbf,
+)
+from the_bootstrap_approach.mixture import Mixture
+from the_bootstrap_approach.performance import ByAltitudeRowIndex, PerformanceProfile
 
 
-def fuel_gal_to_lbf(pressure_altitude, gph):
-    """Convert gallons per hour of AvGas to pounds per hour, considering temperature variation."""
-    # For 100/130 aviation gasoline: Fuel lbf/U.S. gall = 6.077 - 0.00409 x °F.
-    # [1, p. 122].
-    fuel_lbf_per_gal = 6.077 - 0.00409 * british_standard_temperature(pressure_altitude)
-    return gph * fuel_lbf_per_gal
-
-
-def search_profiles_for_matching_name(aircraft, name):
+def search_profiles_for_matching_name(
+    aircraft: dict[str, Any], name: str
+) -> Optional[str]:
     """Try to find a profile w/ the same name to update."""
-    detailed_performance_profiles = [profile for profile in list(aircraft["profiles"].values()) if
-                                     profile["type"] == "Detailed"]
+    detailed_performance_profiles = [
+        profile
+        for profile in list(aircraft["profiles"].values())
+        if profile["type"] == "Detailed"
+    ]
     for profile in detailed_performance_profiles:
         if profile["performanceProfileName"] == name:
             return profile["metadataOid"]
@@ -33,34 +39,53 @@ def search_profiles_for_matching_name(aircraft, name):
     return None
 
 
-def create_foreflight_profile(account_uuid, aircraft_oid, aircraft_uuid, performance_profile_name, climb_profile_name,
-                              climb_profile, cruise_profile, descent_profile_name, descent_speed_ias, update=True):
+def create_foreflight_profile(
+    account_uuid: UUID,
+    aircraft_oid: str,
+    aircraft_uuid: UUID,
+    performance_profile_name: str,
+    climb_profile_name: str,
+    climb_profile: npt.NDArray[npt.NDArray[np.float64]],
+    cruise_profile: npt.NDArray[npt.NDArray[np.float64]],
+    descent_profile_name: str,
+    descent_speed_ias: int,
+) -> None:
     climb_profile_high_index: int = len(climb_profile) - 1
-    climb_ceiling: int = int(climb_profile[climb_profile_high_index][0])
+    climb_ceiling: float = climb_profile[climb_profile_high_index][
+        ByAltitudeRowIndex.PRESSURE_ALTITUDE
+    ]
 
     cruise_profile_high_index: int = len(cruise_profile) - 1
-    cruise_ceiling: int = int(cruise_profile[cruise_profile_high_index][0])
+    cruise_ceiling: float = cruise_profile[cruise_profile_high_index][
+        ByAltitudeRowIndex.PRESSURE_ALTITUDE
+    ]
 
-    aircraft_ceiling: int = min(climb_ceiling, cruise_ceiling)
+    aircraft_ceiling: float = min(climb_ceiling, cruise_ceiling)
     aircraft_ceiling_index: int = int(aircraft_ceiling / 1000)
 
-    detailed_performance_model = {
-        "cruise": {
-            "name": performance_profile_name
-        },
+    detailed_performance_model: dict[str, Any] = {
+        "cruise": {"name": performance_profile_name},
         "points": {},
         "descent": {},
         "climb": {},
     }
 
-    for idx, row in enumerate(cruise_profile):
-        if row[0] <= aircraft_ceiling:
-            detailed_performance_model["points"][int(row[0])] = {
+    for (
+        cruise_row,
+        climb_row,
+    ) in zip(cruise_profile, climb_profile):
+        pressure_altitude = cruise_row[ByAltitudeRowIndex.PRESSURE_ALTITUDE]
+
+        if pressure_altitude <= aircraft_ceiling:
+            detailed_performance_model["points"][pressure_altitude] = {
                 "descentSpeed_kias": descent_speed_ias,
-                "fuelFlow_pph": fuel_gal_to_lbf(row[0], row[INDEX_GPH + 1]),
-                "cruiseSpeed_ktas": row[INDEX_KTAS + 1],
-                "climbSpeed_kias": climb_profile[idx][INDEX_KCAS + 1],
-                "rateOfClimb_fpm": climb_profile[idx][INDEX_ROC + 1],
+                "fuelFlow_pph": fuel_gal_to_lbf(
+                    cruise_row[ByAltitudeRowIndex.GPH],
+                    british_standard_temperature(pressure_altitude),
+                ),
+                "cruiseSpeed_ktas": cruise_row[ByAltitudeRowIndex.KTAS],
+                "climbSpeed_kias": climb_row[ByAltitudeRowIndex.KCAS],
+                "rateOfClimb_fpm": climb_row[ByAltitudeRowIndex.RATE_OF_CLIMB],
             }
         else:
             break
@@ -68,69 +93,90 @@ def create_foreflight_profile(account_uuid, aircraft_oid, aircraft_uuid, perform
     detailed_performance_model["climb"] = {
         "highAlt_ft": aircraft_ceiling,
         "lowAlt_ft": 0,
-        "fuelFlowHighAlt_pph": fuel_gal_to_lbf(aircraft_ceiling, climb_profile[aircraft_ceiling_index][INDEX_GPH + 1]),
+        "fuelFlowHighAlt_pph": fuel_gal_to_lbf(
+            climb_profile[aircraft_ceiling_index][ByAltitudeRowIndex.GPH],
+            british_standard_temperature(aircraft_ceiling),
+        ),
         "name": climb_profile_name,
-        "fuelFlowLowAlt_pph": fuel_gal_to_lbf(0, climb_profile[0][INDEX_GPH + 1]),
+        "fuelFlowLowAlt_pph": fuel_gal_to_lbf(
+            climb_profile[0][ByAltitudeRowIndex.GPH], british_standard_temperature(0)
+        ),
     }
 
     detailed_performance_model["descent"] = {
         "highAlt_ft": climb_ceiling,
         "lowAlt_ft": 0,
-        "fuelFlowHighAlt_pph": detailed_performance_model["points"][aircraft_ceiling]["fuelFlow_pph"],
+        "fuelFlowHighAlt_pph": detailed_performance_model["points"][aircraft_ceiling][
+            "fuelFlow_pph"
+        ],
         "name": descent_profile_name,
         "fuelFlowLowAlt_pph": detailed_performance_model["points"][0]["fuelFlow_pph"],
     }
 
     aircraft = get_aircraft(account_uuid, aircraft_uuid)
 
-    metadata_oid = None
-    if update:
-        metadata_oid = search_profiles_for_matching_name(aircraft, performance_profile_name)
+    metadata_oid = search_profiles_for_matching_name(aircraft, performance_profile_name)
 
-    create_profile(account_uuid, metadata_oid, aircraft_oid, aircraft_uuid, performance_profile_name,
-                   detailed_performance_model)
+    create_profile(
+        account_uuid,
+        metadata_oid,
+        aircraft_oid,
+        aircraft_uuid,
+        performance_profile_name,
+        detailed_performance_model,
+    )
+
+    print(
+        f"Success! {'Updated' if metadata_oid is not None else 'Created'} {performance_profile_name}.\n"  # noqa
+    )
 
 
-def main():
-    account_uuid = os.getenv("FOREFLIGHT_ACCOUNT_UUID")
-    aircraft_oid = os.getenv("FOREFLIGHT_AIRCRAFT_OID")
-    aircraft_uuid = os.getenv("FOREFLIGHT_AIRCRAFT_UUID")
+def main() -> int:
+    account_uuid: UUID = UUID(os.getenv("FOREFLIGHT_ACCOUNT_UUID"))
+    aircraft_oid: str = os.getenv("FOREFLIGHT_AIRCRAFT_OID")
+    aircraft_uuid: UUID = UUID(os.getenv("FOREFLIGHT_AIRCRAFT_UUID"))
 
     if None in (account_uuid, aircraft_oid, aircraft_uuid):
         raise Exception("You must configure this script via the environment.")
 
-    # for gross_aircraft_weight in (2250, 2500, 2750, 3000):
-    #     climb_profile = cruise_climb_profile(gross_aircraft_weight, isa_diff=0)
-    #     cruise_profile = sixty_five_percent_power_thence_wot_profile(gross_aircraft_weight, isa_diff=0)
-    #
-    #     create_foreflight_profile(
-    #         account_uuid,
-    #         aircraft_oid,
-    #         aircraft_uuid,
-    #         f"65% Power Thence Full Throttle, Best Power, {gross_aircraft_weight} lbf",
-    #         f"100 KIAS Cruise Climb at Best Power",
-    #         climb_profile,
-    #         cruise_profile,
-    #         f"137 KIAS Descent at 65% Power",
-    #         137,
-    #         update=True
-    #     )
-
     for gross_aircraft_weight in (2250, 2500, 2750, 3000):
-        climb_profile = best_rate_of_climb_profile(gross_aircraft_weight, isa_diff=0)
-        cruise_profile = best_range_profile(gross_aircraft_weight, isa_diff=0)
+        climb_profile: PerformanceProfile = cruise_climb(
+            N51SW, gross_aircraft_weight, isa_diff=0
+        )
+        cruise_profile: PerformanceProfile = sixty_five_percent_power(
+            N51SW, gross_aircraft_weight, isa_diff=0, mixture=Mixture.BEST_POWER
+        )
 
         create_foreflight_profile(
             account_uuid,
             aircraft_oid,
             aircraft_uuid,
-            f"Best Range, Best Economy, {gross_aircraft_weight} lbf",
-            f"Vy Climb at Best Power",
-            climb_profile,
-            cruise_profile,
-            f"137 KIAS Descent at 65% Power",
+            f"65% Power Thence Full Throttle, {gross_aircraft_weight} lbf",
+            climb_profile.name,
+            climb_profile.data,
+            cruise_profile.data,
+            "137 KIAS Descent at 65% Power",
             137,
-            update=True
+        )
+
+    for gross_aircraft_weight in (2250, 2500, 2750):
+        climb_profile: PerformanceProfile = cruise_climb(
+            N51SW, gross_aircraft_weight, isa_diff=0
+        )
+        cruise_profile: PerformanceProfile = best_range(
+            N51SW, gross_aircraft_weight, isa_diff=0, mixture=Mixture.BEST_ECONOMY
+        )
+
+        create_foreflight_profile(
+            account_uuid,
+            aircraft_oid,
+            aircraft_uuid,
+            f"Best Range, {gross_aircraft_weight} lbf",
+            climb_profile.name,
+            climb_profile.data,
+            cruise_profile.data,
+            "137 KIAS Descent at 65% Power",
+            137,
         )
 
     return 0
