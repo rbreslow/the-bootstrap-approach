@@ -88,7 +88,7 @@
     % > where mag checks are almost always performed at about 30″ MP,
     % > and up around 2,300 RPM (varies with model).
     \checkitem{Throttle}{1800 RPM}
-    % \checkitem{JPI}{normalize}
+    % \checkitem{EGTs}{normalize}
     \checkitem{Mags}{check L \& R}
     \centering{
         (max drop 175; max $\Delta$ 50)
@@ -106,7 +106,7 @@
         \\
     }
     \checkitem{Vacuum}{4.9-5.1$''$Hg}
-    \checkitem{Load meter}{check}
+    \checkitem{Load meter}{positive}
     \checkitem{Fuel pressure}{check}
     \checkitem{Oil pressure \& oil temp.}{check}
     \checkitem{Alternate static}{check}
@@ -115,7 +115,7 @@
     \checkitem{Mixture}{lean for taxi}
 \end{checklist}
 
-\begin{checklist}{Before Take Off}
+\begin{checklist}{Before Takeoff}
     \checkitem{Flight controls}{check}
     \checkitem{Flight instruments}{check}
     \checkitem{Carburetor heat}{off}
@@ -125,24 +125,19 @@
     \hfill
 
     \centering{
-        \emph{Take Off Briefing}
+        \emph{Takeoff Briefing}
     }
 
     \hfill
 
-    \checkitem{Take off distance}{briefed}
-    \checkitem{Take off minimums}{briefed}
+    \checkitem{Takeoff distance}{briefed}
+    \checkitem{Low, close-in obstacles}{briefed}
     \checkitem{Departure procedure}{briefed}
-    \checkitem{Lost communications}{briefed}
+    \checkitem{First fix}{briefed}
+    \checkitem{Abnormal operations}{briefed}
+\end{checklist}
 
-    \hfill
-
-    \centering{
-        \emph{Entering Runway}
-    }
-
-    \hfill
-
+\begin{checklist}{Takeoff}
     \checkitem{Time off}{noted}
     \checkitem{Doors \& windows}{closed}
 
@@ -150,17 +145,22 @@
 
     \checkitem{Exterior lights}{set}
     \checkitem{Fuel pump}{on}
-    \checkitem{Mixture}{full rich}
+    \checkitem{Mixture}{set}
     \checkitem{Prop}{full forward}
 \end{checklist}
 
-\begin{checklist}{After Take Off}
-    \checkitem{Prop}{$-$100 RPM}
-    \checkitem{Fuel pump}{off}
-    \checkitem{Mixture}{constant EGT}
-\end{checklist}
-
 \begin{checklist}{Approach and Landing}
+    \centering{
+        \emph{Approach Briefing}
+    }
+
+    \checkitem{NOTAMS}{briefed}
+    \checkitem{ATIS/Arrival/Approach}{briefed}
+    \checkitem{Terrain/Taxi}{briefed}
+    \checkitem{Specials}{briefed}
+
+    \hfill
+
     \checkitem{Altimeter}{set}
     \checkitem{DA or MDA (MSL)}{set}
 
@@ -174,12 +174,12 @@
 
 \begin{checklist}{Go Around}
     \checkitem{Fuel pump}{on}
-    \checkitem{Mixture}{full rich}
+    \checkitem{Mixture}{set}
     \checkitem{Prop}{full forward}
     \checkitem{Throttle}{full power}
 \end{checklist}
 
-\begin{checklist}{POH V-Speeds ($h_\rho = 0, W = 3000$)}
+\begin{checklist}{POH V-Speeds}
     \checkitem{$V_{S_{0}}$}{56 KIAS}
     \checkitem{$V_{S_{1}}$}{65 KIAS}
     \checkitem{$V_{A}$}{124 KIAS}
