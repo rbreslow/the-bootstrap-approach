@@ -56,12 +56,12 @@ def climb_profile_tex(climb_profile: PerformanceProfile) -> str:
     )
 
     return f"""
-\subsubsection{{{climb_profile.gross_aircraft_weight} lbf, ISA{climb_profile.isa_diff:+} \\textdegree{{C}}}}
+\subsection{{{climb_profile.gross_aircraft_weight} lbf, ISA{climb_profile.isa_diff:+} \\textdegree{{C}}}}
 
 \\textbf{{Conditions:}}
 \\begin{{itemize}}
     \setlength\itemsep{{0em}}
-    \item \checkitem{{Flaps}}{{Up (\\textdegree{{0}})}}
+    \item \checkitem{{Flaps}}{{Up (0\\textdegree{{}})}}
     \item \checkitem{{Power}}{{Full Throttle}}
     \item \checkitem{{Mixture}}{{Full Rich Below 5,000 ft $h_\\rho$ Thence Best Power}}
     \item \checkitem{{Gross Aircraft Weight}}{{{climb_profile.gross_aircraft_weight} lbf}}
@@ -104,7 +104,7 @@ def best_range_tex(gross_aircraft_weight: float, isa_diff: float = 0) -> str:
     )
 
     return f"""
-\subsubsection{{{gross_aircraft_weight} lbf, ISA{isa_diff:+} \\textdegree{{C}}}}
+\subsection{{{gross_aircraft_weight} lbf, ISA{isa_diff:+} \\textdegree{{C}}}}
 
 \\textbf{{Conditions:}}
 \\begin{{itemize}}
@@ -152,7 +152,7 @@ def sixty_five_percent_power_thence_wot_tex(
     )
 
     return f"""
-\subsubsection{{{gross_aircraft_weight} lbf, ISA{isa_diff:+} \\textdegree{{C}}}}
+\subsection{{{gross_aircraft_weight} lbf, ISA{isa_diff:+} \\textdegree{{C}}}}
 
 \\textbf{{Conditions:}}
 \\begin{{itemize}}

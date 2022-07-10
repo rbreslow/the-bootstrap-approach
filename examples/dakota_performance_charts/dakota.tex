@@ -12,7 +12,8 @@
         headsep=12pt,
         footskip=12pt,
         includehead,
-        includefoot
+        includefoot,
+        twoside
     }
 % NASA says:
 % > The horizontal spacing between characters should be 25% of the
@@ -27,12 +28,6 @@
 % So, we're scaling the default spacing by 25%, and then converting to
 % housandths of an em (0.1 * 1000 * .25).
 \usepackage[letterspace=25]{microtype}
-% Used for the checklist frames.
-\usepackage{tcolorbox}
-% For the preflight checklist square.
-\usepackage{amssymb}
-% For finer control over multi-column layouts.
-\usepackage{multicol}
 % For finer control over headers and footers.
 \usepackage{fancyhdr}
 % Used for performance charts.
@@ -43,12 +38,10 @@
 \usepackage{hyperref}
 % Used to embed Python code within LaTeX.
 \usepackage{pythontex} 
-% Used for local table of contents.
-\usepackage{etoc}
 % Used for tables that extend across multiple pages.
 \usepackage{longtable}
-% Helps the table of contents refresh when using PythonTex.
-\usepackage{bookmark}
+% For printing the creation date of the document.
+\usepackage{datetime2}
 
 % This is a macro that formats the checklist items and adds a new line.
 \def\checkitem#1#2{
@@ -67,22 +60,16 @@
 % Configure the header and footer.
 \pagestyle{fancy}
 \fancyhf{}
-\lhead{\rightmark}
-\rhead{Piper PA-28-236}
-\rfoot{\thepage}
+\fancyhead[LE,RO]{Piper Dakota (PA-28-236)}
+\fancyhead[RE,LO]{\rightmark}
+\fancyfoot[LE,RO]{v.\today}
+\fancyfoot[RE,LO]{\thepage}
+
 \begin{document}
 
 % Apply microtype tracking adjustments.
 \lsstyle
 
-% [...] you can say \raggedcolumns if you don’t want the bottom lines to
-% be aligned. The default is \flushcolumns, so TEX will normally try to
-% make both the top and bottom baselines of all columns align.
-\raggedcolumns
-
-\include{dakota.preflight_checklist.tex}
-\include{dakota.normal_procedures.tex}
-\include{dakota.emergency_procedures.tex}
 \include{dakota.performance_charts.tex}
 
 \end{document}
