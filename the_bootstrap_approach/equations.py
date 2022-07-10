@@ -283,3 +283,9 @@ def fuel_lbf_to_gal(fuel_lbf, oat_f):
 
 def ft_lbfs_to_hp(ft_lbfs):
     return ft_lbfs / 550
+
+
+def scale_v_speed_by_weight(speed_at_old_weight, old_weight, new_weight):
+    return speed_at_old_weight + speed_at_old_weight / (2 * new_weight) * (
+        new_weight - old_weight
+    )

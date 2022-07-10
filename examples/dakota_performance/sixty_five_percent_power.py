@@ -6,6 +6,7 @@ from the_bootstrap_approach.conditions import (
     PartialThrottleConditions,
 )
 from the_bootstrap_approach.dataplate import DataPlate
+from the_bootstrap_approach.equations import scale_v_speed_by_weight
 from the_bootstrap_approach.mixture import Mixture
 from the_bootstrap_approach.performance import (
     ByKCASRowIndex,
@@ -43,14 +44,16 @@ def sixty_five_percent_power(
         # This should tip somewhere around 8,000ft.
         winner = min(conditions, key=lambda condition: condition.power)
 
+        # The Dakota stalls at 65.5 KCAS at max gross weight (3000 lbf).
+        stall_speed = scale_v_speed_by_weight(65.5, 3000, gross_aircraft_weight)
+
         table = bootstrap_cruise_performance_table(
-            # 60 through 180 KCAS seemed like a reasonable
-            # range. 60 is below V_{S_1} and 180 is slightly above
-            # V_{NE}.
             dataplate,
             winner,
-            60,
-            180,
+            stall_speed,
+            # We intuit that we shouldn't see more than about 120 KIAS at 65%
+            # power.
+            130,
             0.1,
         )
 

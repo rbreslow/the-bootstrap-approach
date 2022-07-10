@@ -14,6 +14,7 @@ from the_bootstrap_approach.equations import (
     H,
     atmospheric_density,
     relative_atmospheric_density_alt,
+    scale_v_speed_by_weight,
 )
 from the_bootstrap_approach.mixture import Mixture
 from the_bootstrap_approach.performance import (
@@ -62,6 +63,9 @@ def best_range(
     ) -> Optional[npt.NDArray[np.float64]]:
         best_range_candidates: List[npt.NDArray[np.float64]] = []
 
+        # The Dakota stalls at 65.5 KCAS at max gross weight (3000 lbf).
+        stall_speed = scale_v_speed_by_weight(65.5, 3000, gross_aircraft_weight)
+
         best_glide_speed = calculate_best_glide(
             dataplate, gross_aircraft_weight, pressure_altitude, oat_f
         )
@@ -99,7 +103,7 @@ def best_range(
                     # speed, and closely following the engine manual for the
                     # Piper Dakota's Lycoming O-540-J3A5D engine, c is taken
                     # to be only piecewise constant.
-                    start=best_glide_speed - 20,
+                    start=max(stall_speed, best_glide_speed - 20),
                     stop=best_glide_speed + 20,
                     step=0.1,
                 )

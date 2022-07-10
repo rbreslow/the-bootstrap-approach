@@ -1,8 +1,9 @@
 import numpy as np
 import numpy.typing as npt
+
 from the_bootstrap_approach.conditions import FullThrottleConditions
 from the_bootstrap_approach.dataplate import DataPlate
-from the_bootstrap_approach.equations import density_altitude
+from the_bootstrap_approach.equations import density_altitude, scale_v_speed_by_weight
 from the_bootstrap_approach.mixture import Mixture
 from the_bootstrap_approach.performance import (
     bootstrap_cruise_performance_table,
@@ -31,13 +32,15 @@ def best_rate_of_climb(
             dataplate.rated_full_throttle_engine_rpm,
         )
 
+        # The Dakota stalls at 65.5 KCAS at max gross weight (3000 lbf).
+        stall_speed = scale_v_speed_by_weight(65.5, 3000, gross_aircraft_weight)
+
         table = bootstrap_cruise_performance_table(
-            # See how the aircraft behaves under these conditions from 50
-            # through 180 KCAS.
             dataplate,
             operating_conditions,
-            50,
-            180,
+            stall_speed,
+            # We intuit that best rate of climb won't be higher than 100 KIAS.
+            100,
             0.1,
         )
 

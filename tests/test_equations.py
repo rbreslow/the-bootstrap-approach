@@ -9,7 +9,7 @@ from the_bootstrap_approach.equations import (
     propeller_advance_ratio,
     propeller_power_coefficient,
     relative_atmospheric_density_alt,
-    sdef_t,
+    sdef_t, scale_v_speed_by_weight,
 )
 
 
@@ -89,6 +89,24 @@ class TestEquations(unittest.TestCase):
                 0.2088,
                 # of 4 significant digits
                 abs_tol=10**-4,
+            )
+        )
+
+    def test_scale_v_speed_by_weight(self):
+        # > According to Table 7.4, when our sample Cessna 172 is at 8000 ft
+        # > weighing 1800 lb, Vx = 54.7 KCAS. What would Vx be if, instead, it
+        # > weighed 100 lb more, 1900 lb?
+        #
+        # > So, the new Vx, for the higher weight, is about 54.7 + 1.5 = 56.2
+        # > KCAS.
+        # [1, p. 210]
+        print(scale_v_speed_by_weight(54.7, 1800, 1900))
+        self.assertTrue(
+            math.isclose(
+                scale_v_speed_by_weight(54.7, 1800, 1900),
+                56.2,
+                # of 1 significant digits
+                abs_tol=10**-1,
             )
         )
 
