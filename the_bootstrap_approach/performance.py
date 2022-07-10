@@ -1,6 +1,7 @@
 import math
 from dataclasses import dataclass
 from enum import IntEnum
+from typing import Optional, Callable
 
 import numpy as np
 import numpy.typing as npt
@@ -149,7 +150,8 @@ class PerformanceProfile:
 
 
 def by_altitude_profile(
-    func: callable, isa_diff: float = 0
+    func: Callable[[float, float], Optional[npt.NDArray[np.float64]]],
+    isa_diff: float = 0,
 ) -> npt.NDArray[npt.NDArray[np.float64]]:
     profile = []
     pressure_altitude = 0

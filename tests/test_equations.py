@@ -9,7 +9,8 @@ from the_bootstrap_approach.equations import (
     propeller_advance_ratio,
     propeller_power_coefficient,
     relative_atmospheric_density_alt,
-    sdef_t, scale_v_speed_by_weight,
+    sdef_t,
+    scale_v_speed_by_weight,
 )
 
 
