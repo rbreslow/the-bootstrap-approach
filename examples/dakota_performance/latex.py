@@ -43,7 +43,7 @@ def climb_profile_tex(climb_profile: PerformanceProfile) -> str:
             axis=1,
         ),
         headers=(
-            r"$h_\rho$",
+            r"$h_p$",
             "KCAS",
             r"$h$ (ft/min)",
             r"$\gamma$ (ft/nm)",
@@ -63,7 +63,7 @@ def climb_profile_tex(climb_profile: PerformanceProfile) -> str:
     \setlength\itemsep{{0em}}
     \item \checkitem{{Flaps}}{{Up (\\textdegree{{0}})}}
     \item \checkitem{{Power}}{{Full Throttle}}
-    \item \checkitem{{Mixture}}{{Full Rich $< 5000$ DA Thence Best Power}}
+    \item \checkitem{{Mixture}}{{Full Rich Below 5,000 ft $h_\\rho$ Thence Best Power}}
     \item \checkitem{{Gross Aircraft Weight}}{{{climb_profile.gross_aircraft_weight} lbf}}
     \item \checkitem{{Outside Air Temperature}}{{ISA{climb_profile.isa_diff:+} \\textdegree{{C}}}}
     \item \checkitem{{Winds}}{{Zero}}
@@ -90,7 +90,7 @@ def best_range_tex(gross_aircraft_weight: float, isa_diff: float = 0) -> str:
             axis=1,
         ),
         headers=(
-            r"$h_\rho$",
+            r"$h_p$",
             "KCAS",
             "KTAS",
             r"$\eta$",
@@ -138,7 +138,7 @@ def sixty_five_percent_power_thence_wot_tex(
             axis=1,
         ),
         headers=(
-            r"$h_\rho$",
+            "$h_p$",
             "KCAS",
             "KTAS",
             r"$\eta$",

@@ -2,6 +2,19 @@
 
 \pagebreak
 
+\subsection{Best Angle of Climb}
+
+\begin{pycode}
+from examples.n51sw_dataplate import N51SW
+from examples.dakota_performance import best_angle_of_climb
+from examples.dakota_performance.latex import climb_profile_tex
+
+for gross_aircraft_weight in (2250, 2500, 2750, 3000):
+    for isa_diff in (-20, -10, 0, 10, 20):
+        climb_profile = best_angle_of_climb(N51SW, gross_aircraft_weight, isa_diff)
+        print(climb_profile_tex(climb_profile))
+\end{pycode}
+
 \subsection{Best Rate of Climb}
 
 \begin{pycode}
