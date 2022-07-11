@@ -56,12 +56,12 @@ def climb_profile_tex(climb_profile: PerformanceProfile) -> str:
     )
 
     return f"""
-\subsubsection{{{climb_profile.gross_aircraft_weight} lbf, ISA{climb_profile.isa_diff:+} \\textdegree{{C}}}}
+\subsection{{{climb_profile.gross_aircraft_weight} lbf, ISA{climb_profile.isa_diff:+} \\textdegree{{C}}}}
 
 \\textbf{{Conditions:}}
 \\begin{{itemize}}
     \setlength\itemsep{{0em}}
-    \item \checkitem{{Flaps}}{{Up (\\textdegree{{0}})}}
+    \item \checkitem{{Flaps}}{{Up (0\\textdegree{})}}
     \item \checkitem{{Power}}{{Full Throttle}}
     \item \checkitem{{Mixture}}{{Full Rich Below 5,000 ft $h_\\rho$ Thence Best Power}}
     \item \checkitem{{Gross Aircraft Weight}}{{{climb_profile.gross_aircraft_weight} lbf}}
