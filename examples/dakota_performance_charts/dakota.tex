@@ -6,11 +6,6 @@
         % The Jeppesen plate appears to be closer to 0.25in. I think
         % that 0.5in is looking best for checklists.
         margin=0.5in,
-        % I decided arbitrarily on these values to maximize margins,
-        % headers, and content in one page (and satisfy fancyhdr).
-        % https://tex.stackexchange.com/questions/132170/what-do-headheight-headsep-etc-do-in-the-vmargin-package
-        headsep=12pt,
-        footskip=12pt,
         includehead,
         includefoot,
         twoside
@@ -60,8 +55,11 @@
 % Configure the header and footer.
 \pagestyle{fancy}
 \fancyhf{}
-\fancyhead[LE,RO]{Piper Dakota (PA-28-236)}
-\fancyhead[RE,LO]{\rightmark}
+\addtolength{\headheight}{\baselineskip}
+\renewcommand{\sectionmark}[1]{\markboth{#1}{}}
+\renewcommand{\subsectionmark}[1]{\markright{#1}}
+\fancyhead[LE,RO]{\leftmark\\\rightmark}
+\fancyhead[RE,LO]{Bootstrap Performance Data\\PA-28-236, Piper Dakota}
 \fancyfoot[LE,RO]{v.\today}
 \fancyfoot[RE,LO]{\thepage}
 
