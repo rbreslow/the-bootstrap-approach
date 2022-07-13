@@ -42,14 +42,17 @@ def climb_profile_tex(climb_profile: PerformanceProfile) -> str:
             ],
             axis=1,
         ),
+        # When referring to these tables, rounding up to the next ISA+NN
+        # will usually make up for any loss with an altimeter setting
+        # less than 29.92 inHg.
         headers=(
-            r"$h_p$",
-            "KCAS",
-            r"$h$ (ft/min)",
-            r"$\gamma$ (ft/nm)",
-            "RPM",
-            r"\% bhp",
-            "gph",
+            r"\textbf{P\textsubscript{alt}}",
+            r"\textbf{KCAS}",
+            r"\textbf{ft/min}",
+            r"\textbf{ft/NM}",
+            r"\textbf{RPM}",
+            r"\textbf{\% bhp}",
+            r"\textbf{gph}",
         ),
         tablefmt=TABLE_FORMAT,
         floatfmt=(".0f", ".0f", ".0f", ".0f", ".0f", ".1f", ".1f"),
@@ -61,12 +64,12 @@ def climb_profile_tex(climb_profile: PerformanceProfile) -> str:
 \\textbf{{Conditions:}}
 \\begin{{itemize}}
     \setlength\itemsep{{0em}}
-    \item \checkitem{{Flaps}}{{Up (0\\textdegree{{}})}}
-    \item \checkitem{{Power}}{{Full Throttle}}
-    \item \checkitem{{Mixture}}{{Full Rich Below 5,000 ft $h_\\rho$ Thence Best Power}}
-    \item \checkitem{{Gross Aircraft Weight}}{{{climb_profile.gross_aircraft_weight} lbf}}
-    \item \checkitem{{Outside Air Temperature}}{{ISA{climb_profile.isa_diff:+} \\textdegree{{C}}}}
-    \item \checkitem{{Winds}}{{Zero}}
+    \item \checkitem{{Flaps}}{{up (0\\textdegree{{}})}}
+    \item \checkitem{{Power}}{{full throttle}}
+    \item \checkitem{{Mixture}}{{full rich below 5,000 ft D\\textsubscript{{alt}} thence best power}}
+    \item \checkitem{{Gross aircraft weight}}{{{climb_profile.gross_aircraft_weight} lbf}}
+    \item \checkitem{{Outside air temperature}}{{ISA{climb_profile.isa_diff:+} \\textdegree{{C}}}}
+    \item \checkitem{{Winds}}{{zero}}
 \end{{itemize}}
 
 {table}
@@ -90,14 +93,14 @@ def best_range_tex(gross_aircraft_weight: float, isa_diff: float = 0) -> str:
             axis=1,
         ),
         headers=(
-            r"$h_p$",
-            "KCAS",
-            "KTAS",
-            r"$\eta$",
-            "RPM",
-            r"\% bhp",
-            "gph",
-            "mpg",
+            r"\textbf{P\textsubscript{alt}}",
+            r"\textbf{KCAS}",
+            r"\textbf{KTAS}",
+            r"\boldmath$\eta$",
+            r"\textbf{RPM}",
+            r"\textbf{\% bhp}",
+            r"\textbf{gph}",
+            r"\textbf{mpg}",
         ),
         tablefmt=TABLE_FORMAT,
         floatfmt=(".0f", ".0f", ".0f", ".3f", ".0f", ".0f", ".1f", ".1f"),
@@ -109,10 +112,10 @@ def best_range_tex(gross_aircraft_weight: float, isa_diff: float = 0) -> str:
 \\textbf{{Conditions:}}
 \\begin{{itemize}}
     \setlength\itemsep{{0em}}
-    \item \checkitem{{Mixture}}{{Best Economy}}
-    \item \checkitem{{Gross Aircraft Weight}}{{{gross_aircraft_weight} lbf}}
-    \item \checkitem{{Outside Air Temperature}}{{ISA{isa_diff:+} \\textdegree{{C}}}}
-    \item \checkitem{{Winds}}{{Zero}}
+    \item \checkitem{{Mixture}}{{best economy}}
+    \item \checkitem{{Gross aircraft weight}}{{{gross_aircraft_weight} lbf}}
+    \item \checkitem{{Outside air temperature}}{{ISA{isa_diff:+} \\textdegree{{C}}}}
+    \item \checkitem{{Winds}}{{zero}}
 \end{{itemize}}
 
 {table}
@@ -138,14 +141,14 @@ def sixty_five_percent_power_thence_wot_tex(
             axis=1,
         ),
         headers=(
-            "$h_p$",
-            "KCAS",
-            "KTAS",
-            r"$\eta$",
-            "RPM",
-            r"\% bhp",
-            "gph",
-            "mpg",
+            r"\textbf{P\textsubscript{alt}}",
+            r"\textbf{KCAS}",
+            r"\textbf{KTAS}",
+            r"\boldmath$\eta$",
+            r"\textbf{RPM}",
+            r"\textbf{\% bhp}",
+            r"\textbf{gph}",
+            r"\textbf{mpg}",
         ),
         tablefmt=TABLE_FORMAT,
         floatfmt=(".0f", ".0f", ".0f", ".3f", ".0f", ".0f", ".1f", ".1f"),
@@ -157,10 +160,10 @@ def sixty_five_percent_power_thence_wot_tex(
 \\textbf{{Conditions:}}
 \\begin{{itemize}}
     \setlength\itemsep{{0em}}
-    \item \checkitem{{Mixture}}{{Best Power}}
-    \item \checkitem{{Gross Aircraft Weight}}{{{gross_aircraft_weight} lbf}}
-    \item \checkitem{{Outside Air Temperature}}{{ISA{isa_diff:+} \\textdegree{{C}}}}
-    \item \checkitem{{Winds}}{{Zero}}
+    \item \checkitem{{Mixture}}{{best power}}
+    \item \checkitem{{Gross aircraft weight}}{{{gross_aircraft_weight} lbf}}
+    \item \checkitem{{Outside air temperature}}{{ISA{isa_diff:+} \\textdegree{{C}}}}
+    \item \checkitem{{Winds}}{{zero}}
 \end{{itemize}}
 \\textbf{{Note:}} 2200 RPM is chosen as a compromise between engine vibration and
 efficiency.
