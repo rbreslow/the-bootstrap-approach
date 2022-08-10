@@ -1,4 +1,39 @@
+import numpy as np
+
 from the_bootstrap_approach.dataplate import DataPlate
+
+# These values are from the Dakota POH airspeed calibration chart [6, Fig. 5-1].
+dakota_asi_calibration_curve = np.array(
+    [
+        [55.5, 51.5],
+        [56, 52.5],
+        [57, 54],
+        [60.5, 58.5],
+        [61.75, 60.25],
+        [68, 68],
+        [70, 70.5],
+        [74, 75.25],
+        [76, 77.5],
+        [78, 79.75],
+        [80, 82],
+        [82, 84],
+        [84, 86],
+        [86, 88],
+        [90, 92],
+        [92, 94],
+        [94, 96],
+        [100, 102],
+        [104, 106],
+        [106, 108],
+        [118, 120],
+        [122, 124],
+        [135, 137],
+        [138, 140],
+        [140, 142],
+        [158, 160],
+        [171, 173],
+    ]
+)
 
 # As glide tested on December 5th 2021, as Z and BAF determined on December 6th
 # 2021, using Piper's provided ASI calibration curves.
@@ -33,4 +68,5 @@ N51SW = DataPlate(
     # Z, ratio of fuselage diameter (taken one propeller diameter behind the
     # propeller) to propeller diameter.
     ((43 + (5 / 16) + 48) / 2) / 80,
+    dakota_asi_calibration_curve,
 )

@@ -1,3 +1,8 @@
+from typing import Optional
+
+import numpy as np
+import numpy.typing as npt
+
 from the_bootstrap_approach.equations import engine_torque
 from the_bootstrap_approach.mixture import Mixture
 
@@ -17,6 +22,7 @@ class DataPlate:
         propeller_diameter,
         blade_activity_factor,
         z_ratio,
+        asi_calibration_curve: Optional[npt.NDArray[npt.NDArray[np.float64]]] = None,
     ):
         # Airplane configuration. e.g., flaps/gear position.
         self.configuration = configuration
@@ -61,6 +67,9 @@ class DataPlate:
         # Z, ratio of fuselage diameter (taken one propeller diameter behind the
         # propeller) to propeller diameter.
         self.z_ratio = z_ratio
+        # 2D-array containing indicated airspeed as a function of calibrated airspeed,
+        # IAS(CAS).
+        self.asi_calibration_curve = asi_calibration_curve
 
     def bsfc(self, mixture: Mixture):
         if mixture == Mixture.BEST_POWER:
