@@ -1,13 +1,13 @@
-from abc import ABC, abstractmethod
 import math
+from abc import ABC, abstractmethod
 
 from the_bootstrap_approach.dataplate import DataPlate
 from the_bootstrap_approach.equations import (
     G,
     H,
-    density_altitude,
     atmospheric_density,
     altitude_power_dropoff_factor,
+    relative_atmospheric_density,
 )
 from the_bootstrap_approach.mixture import Mixture
 
@@ -43,13 +43,11 @@ class Conditions(ABC):
 
     @property
     def relative_atmospheric_density(self):
-        return (
-            1 - density_altitude(self.pressure_altitude, self.oat_f) / 145457
-        ) ** 4.25635
+        return relative_atmospheric_density(self.pressure_altitude, self.oat_f)
 
     @property
     def atmospheric_density(self):
-        return atmospheric_density(self.relative_atmospheric_density)
+        return atmospheric_density(self.pressure_altitude, self.oat_f)
 
     @property
     @abstractmethod

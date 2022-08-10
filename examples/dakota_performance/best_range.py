@@ -1,6 +1,6 @@
-import math
 from typing import List, Optional
 
+import math
 import numpy as np
 import numpy.typing as npt
 
@@ -10,11 +10,12 @@ from the_bootstrap_approach.conditions import (
 )
 from the_bootstrap_approach.dataplate import DataPlate
 from the_bootstrap_approach.equations import (
+    atmospheric_density,
+    scale_v_speed_by_weight,
     G,
     H,
-    atmospheric_density,
-    relative_atmospheric_density_alt,
-    scale_v_speed_by_weight,
+    relative_atmospheric_density,
+    fts_to_kn,
 )
 from the_bootstrap_approach.mixture import Mixture
 from the_bootstrap_approach.performance import (
@@ -31,17 +32,18 @@ def calculate_best_glide(
     pressure_altitude: float,
     oat_f: float,
 ) -> float:
-    sigma = relative_atmospheric_density_alt(oat_f, pressure_altitude)
+    sigma = relative_atmospheric_density(pressure_altitude, oat_f)
+    rho = atmospheric_density(pressure_altitude, oat_f)
 
     g = G(
-        atmospheric_density(sigma),
+        rho,
         dataplate.reference_wing_area,
         dataplate.parasite_drag_coefficient,
     )
 
     h = H(
         gross_aircraft_weight,
-        atmospheric_density(sigma),
+        rho,
         dataplate.reference_wing_area,
         dataplate.airplane_efficiency_factor,
         dataplate.wing_aspect_ratio,
@@ -49,7 +51,7 @@ def calculate_best_glide(
 
     u = h / g
 
-    return math.sqrt(sigma) * 0.592484 * u ** (1 / 4)
+    return fts_to_kn(math.sqrt(sigma) * u ** (1 / 4))
 
 
 def best_range(

@@ -1,13 +1,13 @@
+import math
 import unittest
 
-import math
-
 from the_bootstrap_approach.equations import (
-    atmospheric_density,
     sdef_t,
     propeller_advance_ratio,
     propeller_power_coefficient,
     power_adjustment_factor_x,
+    atmospheric_density,
+    british_standard_temperature,
 )
 from the_bootstrap_approach.propeller_chart import propeller_efficiency
 
@@ -41,14 +41,14 @@ class TestPropellerChart(unittest.TestCase):
     def test_c182rg_example(self):
         self.assertTrue(
             math.isclose(
-                # These values are from the first row of Dr. Lowry's bootstp2.xls,
-                # modeling performance of his C182RG.
+                # These values are from the first row of Dr. Lowry's bootstp2.xls
+                # spreadsheet, modeling performance of his C182RG.
                 propeller_efficiency(
                     sdef_t(0.688),
                     propeller_advance_ratio(67.6762 / 0.5924838, 2300 / 60, 6.83),
                     propeller_power_coefficient(
                         0.65 * 235 * 550,
-                        atmospheric_density((1 - 8000 / 145457) ** 4.25635),
+                        atmospheric_density(8000, british_standard_temperature(8000)),
                         2300 / 60,
                         6.83,
                     ),

@@ -20,54 +20,45 @@ def engine_power(torque, propeller_rps):
     return 2 * math.pi * propeller_rps * torque
 
 
-def relative_atmospheric_density(atmospheric_density, msl_standard_density=0.002377):
-    """Calculate relative atmospheric density with :math`ρ`.
+def relative_temperature(oat_f):
+    # Temperature ratio is temperature in absolute Fahrenheit (Rankine) units (°R =
+    # °F + 459.7) divided by MSL standard temperature [1, p. 7].
+    return (oat_f + 459.7) / 518.7
+
+
+def relative_pressure(pressure_altitude):
+    # Pressure ratio is temperature in absolute Fahrenheit (Rankine) units (°R =
+    # °F + 459.7) divided by MSL standard temperature [1, p. 7].
+    return (1 - pressure_altitude / 145457) ** 5.25635
+
+
+def relative_atmospheric_density(pressure_altitude, oat_f):
+    """Calculate relative atmospheric density with :math:`h_p` and OAT°F.
 
     Args:
-        atmospheric_density:
-            :math`ρ`, atmospheric density in slug/ft^3.
-        msl_standard_density:
-            MSL standard density :math:`ρ_0 = 0.002377` slug/ft^3 (Optional).
+        oat_f: OAT°F, outside air temperature in degrees Fahrenheit.
+        pressure_altitude: :math:`h_p`, pressure altitude.
 
     Returns:
-        relative_atmospheric_density: :math:`σ`, relative atmospheric density.
+        relative_atmospheric_density: σ, relative atmospheric density.
     """
-    return atmospheric_density / msl_standard_density
+    # "Correcting" the pressure ratio for non-standard temperature yields the density
+    # ratio (relative atmospheric density) [9, p. 989], [1, p. 20].
+    return relative_pressure(pressure_altitude) / relative_temperature(oat_f)
 
 
-def relative_atmospheric_density_alt(oat_f, pressure_altitude):
-    """Calculate relative atmospheric density with :math:`h_p` and
-    :math:`{OAT_{\degree{F}}}`.
+def atmospheric_density(pressure_altitude, oat_f):
+    """Calculate atmospheric density ρ with :math:`h_p` and OAT°F.
 
     Args:
-        oat_f:
-            :math:`{OAT_{\degree{F}}}`, outside air temperature in degrees
-            Fahrenheit.
-        pressure_altitude:
-            :math:`h_p`, pressure altitude.
+        pressure_altitude: :math:`h_p`, pressure altitude.
+        oat_f: OAT°F, outside air temperature in degrees Fahrenheit.
 
     Returns:
-        relative_atmospheric_density: :math:`σ`, relative atmospheric density.
+        atmospheric_density: ρ, atmospheric density in slugs/ft³.
     """
-    # From Pg. 1 of TBA Field Guide.
-    return (518.7 / (oat_f + 459.7)) * (
-        1 - 6.8749 * 10**-6 * pressure_altitude
-    ) ** 5.25625
-
-
-def atmospheric_density(relative_atmospheric_density, msl_standard_density=0.002377):
-    """Convert relative atmospheric density :math:`σ` to atmospheric density :math`ρ`.
-
-    Args:
-        relative_atmospheric_density:
-            :math:`σ`, relative atmospheric density.
-        msl_standard_density:
-            MSL standard density :math:`ρ_0 = 0.002377` slug/ft^3 (Optional).
-
-    Returns:
-        atmospheric_density: :math`ρ`, atmospheric density in slug/ft^3.
-    """
-    return relative_atmospheric_density * msl_standard_density
+    # The standard MSL value of density for dry air is 0.002377 slugs/ft³ [1, p. 7].
+    return relative_atmospheric_density(pressure_altitude, oat_f) * 0.002377
 
 
 def altitude_power_dropoff_factor(
@@ -128,10 +119,18 @@ def metric_standard_temperature(altitude):
 
 
 def density_altitude(pressure_altitude, oat_f):
-    """Get density altitude :math:`h_ρ` from :math:`h_p` and OAT°F."""
-    return (
-        f_to_c(oat_f) - metric_standard_temperature(pressure_altitude)
-    ) * 118.8 + pressure_altitude
+    """Get density altitude :math:`h_ρ` with :math:`h_p` and OAT°F.
+
+    Args:
+        pressure_altitude: :math:`h_p`, pressure altitude.
+        oat_f: OAT°F, outside air temperature in degrees Fahrenheit.
+
+    Returns:
+        density_altitude: :math:`h_p`, density altitude.
+    """
+    return 145457 * (
+        1 - relative_atmospheric_density(pressure_altitude, oat_f) ** 0.23494
+    )
 
 
 def bootstrap_power_setting_parameter(
@@ -260,7 +259,11 @@ def cas(tas, relative_atmospheric_density):
 
 
 def kn_to_fts(kn):
-    return kn / 0.5924838
+    return kn * (6076.115 / 3600)
+
+
+def fts_to_kn(fts):
+    return fts * (3600 / 6076.115)
 
 
 def fuel_gal_to_lbf(fuel_gal, oat_f):

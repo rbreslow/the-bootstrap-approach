@@ -40,3 +40,4 @@ Pretty close!
 1. “Dakota Pilot’s Operating Handbook and FAA Approved Airplane Flight Manual,” Piper Aircraft Corporation, Vero Beach, FL, Jun. 1978.
 1. J. Yates, “Predicting Performance,” KITPLANES, 19-Feb-2015. [Online]. Available: https://www.kitplanes.com/predicting-performance/.
 1. Federal Aviation Administration, Pilot’s Handbook of Aeronautical Knowledge. Oklahoma City, OK: United States Department of Transportation, Federal Aviation Administration, Airman Testing Standards Branch, 2016.
+1. S. Gudmundsson, General Aviation Aircraft Design: Applied Methods and Procedures. Oxford, UK: Butterworth-Heinemann, 2014.

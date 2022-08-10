@@ -2,35 +2,59 @@ import unittest
 
 import math
 
+import numpy as np
+
 from the_bootstrap_approach.equations import (
     altitude_power_dropoff_factor,
     atmospheric_density,
     power_adjustment_factor_x,
     propeller_advance_ratio,
     propeller_power_coefficient,
-    relative_atmospheric_density_alt,
+    relative_atmospheric_density,
     sdef_t,
     scale_v_speed_by_weight,
+    british_standard_temperature,
+    relative_temperature,
+    relative_pressure,
 )
 
 
 class TestEquations(unittest.TestCase):
+    # The following four tests implement Example 16-1 from General Aviation Aircraft
+    # Design: Applied Methods and Procedures, which models the state of the
+    # atmosphere at 8500 ft on a standard day [9, p. 765].
+    def test_relative_temperature(self):
+        self.assertEqual(
+            np.around(relative_temperature(british_standard_temperature(8500)), 4),
+            0.9416,
+        )
+
+    def test_relative_pressure(self):
+        self.assertEqual(
+            np.around(relative_pressure(8500), 4),
+            0.7287,
+        )
+
+    def test_relative_atmospheric_density(self):
+        self.assertEqual(
+            np.around(
+                relative_atmospheric_density(8500, british_standard_temperature(8500)),
+                4,
+            ),
+            0.7739,
+        )
+
     def test_atmospheric_density(self):
-        # TBA Field Guide Pg. 1
-        self.assertTrue(
-            math.isclose(
-                atmospheric_density(0.88808),
-                0.002111,
-                # of 4 significant digits
-                abs_tol=10**-6,
-            )
+        self.assertEqual(
+            np.around(atmospheric_density(8500, british_standard_temperature(8500)), 6),
+            0.001840,
         )
 
     def test_altitude_power_dropoff_factor(self):
         # Compared against the Lycoming Operator's Manual for the O-540-J35AD.
         self.assertTrue(
             math.isclose(
-                altitude_power_dropoff_factor(relative_atmospheric_density_alt(59, 0))
+                altitude_power_dropoff_factor(relative_atmospheric_density(0, 59))
                 * 235,
                 235,
                 # of 0 significant digits
@@ -39,9 +63,7 @@ class TestEquations(unittest.TestCase):
         )
         self.assertTrue(
             math.isclose(
-                altitude_power_dropoff_factor(
-                    relative_atmospheric_density_alt(-4, 17500)
-                )
+                altitude_power_dropoff_factor(relative_atmospheric_density(17500, -4))
                 * 235,
                 122,
                 # of 0 significant digits
