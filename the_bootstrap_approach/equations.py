@@ -292,3 +292,14 @@ def scale_v_speed_by_weight(speed_at_old_weight, old_weight, new_weight):
     return speed_at_old_weight + speed_at_old_weight / (2 * new_weight) * (
         new_weight - old_weight
     )
+
+
+def lift_coefficient(
+    gross_aircraft_weight, atmospheric_density, air_speed, reference_wing_area
+):
+    """Determine airplane lift coefficient CL as function of air speed, CL(V),
+    under given conditions."""
+    # [1, eq. (7.5)].
+    return (2 * gross_aircraft_weight) / (
+        atmospheric_density * air_speed**2 * reference_wing_area
+    )

@@ -13,6 +13,8 @@ from the_bootstrap_approach.equations import (
     relative_atmospheric_density,
     sdef_t,
     scale_v_speed_by_weight,
+    kn_to_fts,
+    lift_coefficient,
     british_standard_temperature,
     relative_temperature,
     relative_pressure,
@@ -123,7 +125,6 @@ class TestEquations(unittest.TestCase):
         # > So, the new Vx, for the higher weight, is about 54.7 + 1.5 = 56.2
         # > KCAS.
         # [1, p. 210]
-        print(scale_v_speed_by_weight(54.7, 1800, 1900))
         self.assertTrue(
             math.isclose(
                 scale_v_speed_by_weight(54.7, 1800, 1900),
@@ -131,6 +132,20 @@ class TestEquations(unittest.TestCase):
                 # of 1 significant digits
                 abs_tol=10**-1,
             )
+        )
+
+    def test_lift_coefficient(self):
+        # Calculate CL-max and compare to Dr. Lowry's calculated CL-max [1, p. 108].
+        self.assertEqual(
+            # The Cessna 172P POH cites stall speed for flaps 0° as 52 KCAS. We
+            # assume all book numbers are 2400 lbf (MTOW) under standard day MSL
+            # conditions. The reference wing area is 174 ft². Dr. Lowry's
+            # calculated CL-max is 1.51.
+            np.around(
+                lift_coefficient(2400, atmospheric_density(0, 59), kn_to_fts(52), 174),
+                2,
+            ),
+            1.51,
         )
 
 
