@@ -6,6 +6,7 @@ from typing import Optional, Callable
 import numpy as np
 import numpy.typing as npt
 
+from the_bootstrap_approach.airspeed_calibration import cas_to_ias
 from the_bootstrap_approach.conditions import (
     Conditions,
 )
@@ -29,26 +30,7 @@ from the_bootstrap_approach.propeller_chart import propeller_efficiency
 
 class ByKCASRowIndex(IntEnum):
     KCAS = 0
-    KTAS = 1
-    PROPELLER_EFFICIENCY = 2
-    THRUST = 3
-    DRAG = 4
-    RATE_OF_CLIMB = 5
-    ANGLE_OF_CLIMB = 6
-    FEET_PER_NAUTICAL_MILE = 7
-    POWER_REQUIRED = 8
-    POWER_AVAILABLE = 9
-    EXCESS_POWER = 10
-    RPM = 11
-    PBHP = 12
-    GPH = 13
-    FUEL_FLOW_PER_KNOT = 14
-    MPG = 15
-
-
-class ByAltitudeRowIndex(IntEnum):
-    PRESSURE_ALTITUDE = 0
-    KCAS = 1
+    KIAS = 1
     KTAS = 2
     PROPELLER_EFFICIENCY = 3
     THRUST = 4
@@ -66,6 +48,27 @@ class ByAltitudeRowIndex(IntEnum):
     MPG = 16
 
 
+class ByAltitudeRowIndex(IntEnum):
+    PRESSURE_ALTITUDE = 0
+    KCAS = 1
+    KIAS = 2
+    KTAS = 3
+    PROPELLER_EFFICIENCY = 4
+    THRUST = 5
+    DRAG = 6
+    RATE_OF_CLIMB = 7
+    ANGLE_OF_CLIMB = 8
+    FEET_PER_NAUTICAL_MILE = 9
+    POWER_REQUIRED = 10
+    POWER_AVAILABLE = 11
+    EXCESS_POWER = 12
+    RPM = 13
+    PBHP = 14
+    GPH = 15
+    FUEL_FLOW_PER_KNOT = 16
+    MPG = 17
+
+
 def bootstrap_cruise_performance_table(
     dataplate: DataPlate,
     operating_conditions: Conditions,
@@ -75,6 +78,7 @@ def bootstrap_cruise_performance_table(
     headwind=0,
 ) -> np.ndarray:
     kcas = np.arange(start, stop, step)
+    kias = cas_to_ias(dataplate, kcas)
     ktas = tas(kcas, operating_conditions.relative_atmospheric_density) + headwind
     vt = kn_to_fts(ktas)
 
@@ -128,6 +132,7 @@ def bootstrap_cruise_performance_table(
     return np.column_stack(
         (
             kcas,
+            kias,
             ktas,
             eta,
             thrust,

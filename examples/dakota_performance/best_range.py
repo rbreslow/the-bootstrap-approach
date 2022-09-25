@@ -4,6 +4,7 @@ import math
 import numpy as np
 import numpy.typing as npt
 
+from the_bootstrap_approach.airspeed_calibration import ias_to_cas
 from the_bootstrap_approach.conditions import (
     FullThrottleConditions,
     PartialThrottleConditions,
@@ -65,8 +66,10 @@ def best_range(
     ) -> Optional[npt.NDArray[np.float64]]:
         best_range_candidates: List[npt.NDArray[np.float64]] = []
 
-        # The Dakota stalls at 65.5 KCAS at max gross weight (3000 lbf).
-        stall_speed = scale_v_speed_by_weight(65.5, 3000, gross_aircraft_weight)
+        # The Dakota stalls at 65 KIAS at max gross weight (3000 lbf).
+        stall_speed = scale_v_speed_by_weight(
+            ias_to_cas(dataplate, 65), 3000, gross_aircraft_weight
+        )
 
         best_glide_speed = calculate_best_glide(
             dataplate, gross_aircraft_weight, pressure_altitude, oat_f

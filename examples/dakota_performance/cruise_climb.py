@@ -1,6 +1,8 @@
 import numpy as np
 import numpy.typing as npt
 
+from examples.n51sw_dataplate import N51SW
+from the_bootstrap_approach.airspeed_calibration import ias_to_cas
 from the_bootstrap_approach.conditions import FullThrottleConditions
 from the_bootstrap_approach.dataplate import DataPlate
 from the_bootstrap_approach.equations import density_altitude
@@ -32,11 +34,13 @@ def cruise_climb(
             dataplate.rated_full_throttle_engine_rpm,
         )
 
+        cruise_climb_cas = ias_to_cas(N51SW, 100)
+
         row = bootstrap_cruise_performance_table(
-            dataplate, operating_conditions, 100, 101, 1
+            dataplate, operating_conditions, cruise_climb_cas, cruise_climb_cas + 1, 1
         )[0]
 
-        target_airspeed = 100
+        target_airspeed = cruise_climb_cas
         target_fpm = 200
 
         while row[ByKCASRowIndex.RATE_OF_CLIMB] < target_fpm:
@@ -48,7 +52,7 @@ def cruise_climb(
             # Once it's impossible to climb at this target rate, set a lower
             # target and reset the search.
             if row[ByKCASRowIndex.KCAS] == 50:
-                target_airspeed = 100
+                target_airspeed = cruise_climb_cas
                 target_fpm -= 10
 
             # We've hit our ceiling.

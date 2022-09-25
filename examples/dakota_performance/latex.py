@@ -34,7 +34,7 @@ def climb_profile_tex(climb_profile: PerformanceProfile) -> str:
             :,
             [
                 ByAltitudeRowIndex.PRESSURE_ALTITUDE,
-                ByAltitudeRowIndex.KCAS,
+                ByAltitudeRowIndex.KIAS,
                 ByAltitudeRowIndex.RATE_OF_CLIMB,
                 ByAltitudeRowIndex.FEET_PER_NAUTICAL_MILE,
                 ByAltitudeRowIndex.RPM,
@@ -47,7 +47,7 @@ def climb_profile_tex(climb_profile: PerformanceProfile) -> str:
         # less than 29.92 inHg.
         headers=(
             r"\textbf{P\textsubscript{alt}}",
-            r"\textbf{KCAS}",
+            r"\textbf{KIAS}",
             r"\textbf{ft/min}",
             r"\textbf{ft/NM}",
             r"\textbf{RPM}",
@@ -87,7 +87,7 @@ def best_range_tex(gross_aircraft_weight: float, isa_diff: float = 0) -> str:
             :,
             [
                 ByAltitudeRowIndex.PRESSURE_ALTITUDE,
-                ByAltitudeRowIndex.KCAS,
+                ByAltitudeRowIndex.KIAS,
                 ByAltitudeRowIndex.KTAS,
                 ByAltitudeRowIndex.PROPELLER_EFFICIENCY,
                 ByAltitudeRowIndex.RPM,
@@ -98,7 +98,7 @@ def best_range_tex(gross_aircraft_weight: float, isa_diff: float = 0) -> str:
         ],
         headers=(
             r"\textbf{P\textsubscript{alt}}",
-            r"\textbf{KCAS}",
+            r"\textbf{KIAS}",
             r"\textbf{KTAS}",
             r"\boldmath$\eta$",
             r"\textbf{RPM}",
@@ -139,7 +139,7 @@ def sixty_five_percent_power_thence_wot_tex(
             :,
             [
                 ByAltitudeRowIndex.PRESSURE_ALTITUDE,
-                ByAltitudeRowIndex.KCAS,
+                ByAltitudeRowIndex.KIAS,
                 ByAltitudeRowIndex.KTAS,
                 ByAltitudeRowIndex.PROPELLER_EFFICIENCY,
                 ByAltitudeRowIndex.RPM,
@@ -150,7 +150,7 @@ def sixty_five_percent_power_thence_wot_tex(
         ],
         headers=(
             r"\textbf{P\textsubscript{alt}}",
-            r"\textbf{KCAS}",
+            r"\textbf{KIAS}",
             r"\textbf{KTAS}",
             r"\boldmath$\eta$",
             r"\textbf{RPM}",

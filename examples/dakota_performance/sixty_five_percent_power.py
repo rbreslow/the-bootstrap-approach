@@ -1,6 +1,7 @@
 import numpy as np
 import numpy.typing as npt
 
+from the_bootstrap_approach.airspeed_calibration import ias_to_cas
 from the_bootstrap_approach.conditions import (
     FullThrottleConditions,
     PartialThrottleConditions,
@@ -44,8 +45,10 @@ def sixty_five_percent_power(
         # This should tip somewhere around 8,000ft.
         winner = min(conditions, key=lambda condition: condition.power)
 
-        # The Dakota stalls at 65.5 KCAS at max gross weight (3000 lbf).
-        stall_speed = scale_v_speed_by_weight(65.5, 3000, gross_aircraft_weight)
+        # The Dakota stalls at 65 KIAS at max gross weight (3000 lbf).
+        stall_speed = scale_v_speed_by_weight(
+            ias_to_cas(dataplate, 65), 3000, gross_aircraft_weight
+        )
 
         table = bootstrap_cruise_performance_table(
             dataplate,
