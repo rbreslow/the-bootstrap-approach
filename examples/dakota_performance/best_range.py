@@ -101,6 +101,10 @@ def best_range(
                 table = bootstrap_cruise_performance_table(
                     dataplate,
                     partial_throttle_conditions,
+                    # Start at stall speed. At altitudes past ~12,000', there isn't
+                    # enough power to maintain altitude at the airframe's best glide
+                    # speed.
+                    start=stall_speed,
                     # In a simplified theory in which propeller efficiency and
                     # specific fuel consumption are constant, best range speed
                     # is the speed for best glide. Our calculations improve
@@ -108,8 +112,7 @@ def best_range(
                     # speed, and closely following the engine manual for the
                     # Piper Dakota's Lycoming O-540-J3A5D engine, c is taken
                     # to be only piecewise constant.
-                    start=max(stall_speed, best_glide_speed - 20),
-                    stop=best_glide_speed + 20,
+                    stop=best_glide_speed * 1.10,
                     step=0.1,
                 )
 
