@@ -31,13 +31,19 @@ class ByKCASRowIndex(IntEnum):
     KCAS = 0
     KTAS = 1
     PROPELLER_EFFICIENCY = 2
-    RATE_OF_CLIMB = 3
-    ANGLE_OF_CLIMB = 4
-    RPM = 5
-    PBHP = 6
-    GPH = 7
-    FUEL_FLOW_PER_KNOT = 8
-    MPG = 9
+    THRUST = 3
+    DRAG = 4
+    RATE_OF_CLIMB = 5
+    ANGLE_OF_CLIMB = 6
+    FEET_PER_NAUTICAL_MILE = 7
+    POWER_REQUIRED = 8
+    POWER_AVAILABLE = 9
+    EXCESS_POWER = 10
+    RPM = 11
+    PBHP = 12
+    GPH = 13
+    FUEL_FLOW_PER_KNOT = 14
+    MPG = 15
 
 
 class ByAltitudeRowIndex(IntEnum):
@@ -45,13 +51,19 @@ class ByAltitudeRowIndex(IntEnum):
     KCAS = 1
     KTAS = 2
     PROPELLER_EFFICIENCY = 3
-    RATE_OF_CLIMB = 4
-    ANGLE_OF_CLIMB = 5
-    RPM = 6
-    PBHP = 7
-    GPH = 8
-    FUEL_FLOW_PER_KNOT = 9
-    MPG = 10
+    THRUST = 4
+    DRAG = 5
+    RATE_OF_CLIMB = 6
+    ANGLE_OF_CLIMB = 7
+    FEET_PER_NAUTICAL_MILE = 8
+    POWER_REQUIRED = 9
+    POWER_AVAILABLE = 10
+    EXCESS_POWER = 11
+    RPM = 12
+    PBHP = 13
+    GPH = 14
+    FUEL_FLOW_PER_KNOT = 15
+    MPG = 16
 
 
 def bootstrap_cruise_performance_table(
@@ -60,7 +72,6 @@ def bootstrap_cruise_performance_table(
     start,
     stop,
     step,
-    expanded=False,
     headwind=0,
 ) -> np.ndarray:
     kcas = np.arange(start, stop, step)
@@ -110,34 +121,30 @@ def bootstrap_cruise_performance_table(
         operating_conditions.oat_f,
     )
 
+    # https://aviation.stackexchange.com/questions/63976/what-is-carson-cruise-and-can-i-determine-it-myself
     fuel_flow_per_knot = thrust / vt
     mpg = ktas / gph
 
-    if expanded:
-        return np.column_stack(
-            (
-                kcas,
-                ktas,
-                eta,
-                thrust,
-                drag,
-                roc,
-                aoc,
-                ftnm,
-                pre,
-                pav,
-                pxs,
-                rpm,
-                pbhp,
-                gph,
-                fuel_flow_per_knot,
-                mpg,
-            )
+    return np.column_stack(
+        (
+            kcas,
+            ktas,
+            eta,
+            thrust,
+            drag,
+            roc,
+            aoc,
+            ftnm,
+            pre,
+            pav,
+            pxs,
+            rpm,
+            pbhp,
+            gph,
+            fuel_flow_per_knot,
+            mpg,
         )
-    else:
-        return np.column_stack(
-            (kcas, ktas, eta, roc, ftnm, rpm, pbhp, gph, fuel_flow_per_knot, mpg)
-        )
+    )
 
 
 @dataclass(frozen=True)

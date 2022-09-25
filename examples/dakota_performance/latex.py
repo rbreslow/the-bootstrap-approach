@@ -1,5 +1,3 @@
-import numpy as np
-
 # noinspection PyProtectedMember
 from tabulate import (
     TableFormat,
@@ -32,16 +30,18 @@ TABLE_FORMAT: TableFormat = TableFormat(
 
 def climb_profile_tex(climb_profile: PerformanceProfile) -> str:
     table = tabulate(
-        np.delete(
-            climb_profile.data,
+        climb_profile.data[
+            :,
             [
-                ByAltitudeRowIndex.KTAS,
-                ByAltitudeRowIndex.PROPELLER_EFFICIENCY,
-                ByAltitudeRowIndex.FUEL_FLOW_PER_KNOT,
-                ByAltitudeRowIndex.MPG,
+                ByAltitudeRowIndex.PRESSURE_ALTITUDE,
+                ByAltitudeRowIndex.KCAS,
+                ByAltitudeRowIndex.RATE_OF_CLIMB,
+                ByAltitudeRowIndex.FEET_PER_NAUTICAL_MILE,
+                ByAltitudeRowIndex.RPM,
+                ByAltitudeRowIndex.PBHP,
+                ByAltitudeRowIndex.GPH,
             ],
-            axis=1,
-        ),
+        ],
         # When referring to these tables, rounding up to the next ISA+NN
         # will usually make up for any loss with an altimeter setting
         # less than 29.92 inHg.
@@ -55,7 +55,7 @@ def climb_profile_tex(climb_profile: PerformanceProfile) -> str:
             r"\textbf{gph}",
         ),
         tablefmt=TABLE_FORMAT,
-        floatfmt=(".0f", ".0f", ".0f", ".0f", ".0f", ".1f", ".1f"),
+        floatfmt=(".0f", ".0f", ".0f", ".0f", ".0f", ".0f", ".1f"),
     )
 
     return f"""
@@ -83,15 +83,19 @@ def best_range_tex(gross_aircraft_weight: float, isa_diff: float = 0) -> str:
     )
 
     table = tabulate(
-        np.delete(
-            cruise_profile.data,
+        cruise_profile.data[
+            :,
             [
-                ByAltitudeRowIndex.RATE_OF_CLIMB,
-                ByAltitudeRowIndex.ANGLE_OF_CLIMB,
-                ByAltitudeRowIndex.FUEL_FLOW_PER_KNOT,
+                ByAltitudeRowIndex.PRESSURE_ALTITUDE,
+                ByAltitudeRowIndex.KCAS,
+                ByAltitudeRowIndex.KTAS,
+                ByAltitudeRowIndex.PROPELLER_EFFICIENCY,
+                ByAltitudeRowIndex.RPM,
+                ByAltitudeRowIndex.PBHP,
+                ByAltitudeRowIndex.GPH,
+                ByAltitudeRowIndex.MPG,
             ],
-            axis=1,
-        ),
+        ],
         headers=(
             r"\textbf{P\textsubscript{alt}}",
             r"\textbf{KCAS}",
@@ -131,15 +135,19 @@ def sixty_five_percent_power_thence_wot_tex(
     )
 
     table = tabulate(
-        np.delete(
-            cruise_profile.data,
+        cruise_profile.data[
+            :,
             [
-                ByAltitudeRowIndex.RATE_OF_CLIMB,
-                ByAltitudeRowIndex.ANGLE_OF_CLIMB,
-                ByAltitudeRowIndex.FUEL_FLOW_PER_KNOT,
+                ByAltitudeRowIndex.PRESSURE_ALTITUDE,
+                ByAltitudeRowIndex.KCAS,
+                ByAltitudeRowIndex.KTAS,
+                ByAltitudeRowIndex.PROPELLER_EFFICIENCY,
+                ByAltitudeRowIndex.RPM,
+                ByAltitudeRowIndex.PBHP,
+                ByAltitudeRowIndex.GPH,
+                ByAltitudeRowIndex.MPG,
             ],
-            axis=1,
-        ),
+        ],
         headers=(
             r"\textbf{P\textsubscript{alt}}",
             r"\textbf{KCAS}",

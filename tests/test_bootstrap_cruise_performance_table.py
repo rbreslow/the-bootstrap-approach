@@ -5,7 +5,10 @@ from the_bootstrap_approach.conditions import PartialThrottleConditions
 from the_bootstrap_approach.dataplate import DataPlate
 from the_bootstrap_approach.equations import british_standard_temperature
 from the_bootstrap_approach.mixture import Mixture
-from the_bootstrap_approach.performance import bootstrap_cruise_performance_table
+from the_bootstrap_approach.performance import (
+    bootstrap_cruise_performance_table,
+    ByKCASRowIndex,
+)
 
 
 class TestBootstrapCruisePerformanceTable(unittest.TestCase):
@@ -51,7 +54,7 @@ class TestBootstrapCruisePerformanceTable(unittest.TestCase):
         )
 
         self.table = bootstrap_cruise_performance_table(
-            self.dataplate, self.operating_conditions, 60, 180, 0.5, expanded=True
+            self.dataplate, self.operating_conditions, 60, 180, 0.5
         )
 
         pass
@@ -59,17 +62,17 @@ class TestBootstrapCruisePerformanceTable(unittest.TestCase):
     def test_ktas(self):
         self.assertTrue(
             math.isclose(
-                self.table[0][1],
+                self.table[0][ByKCASRowIndex.KTAS],
                 67.6,
                 # of 1 significant digits
                 abs_tol=10**-1,
             )
         )
 
-    def test_eta(self):
+    def test_propeller_efficiency(self):
         self.assertTrue(
             math.isclose(
-                self.table[0][2],
+                self.table[0][ByKCASRowIndex.PROPELLER_EFFICIENCY],
                 0.6166,
                 # of 4 significant digits
                 abs_tol=10**-4,
@@ -79,7 +82,7 @@ class TestBootstrapCruisePerformanceTable(unittest.TestCase):
     def test_thrust(self):
         self.assertTrue(
             math.isclose(
-                self.table[0][3],
+                self.table[0][ByKCASRowIndex.THRUST],
                 453,
                 # of 0 significant digits
                 abs_tol=10**-0,
@@ -89,27 +92,27 @@ class TestBootstrapCruisePerformanceTable(unittest.TestCase):
     def test_drag(self):
         self.assertTrue(
             math.isclose(
-                self.table[0][4],
+                self.table[0][ByKCASRowIndex.DRAG],
                 329,
                 # of 0 significant digits
                 abs_tol=10**-0,
             )
         )
 
-    def test_roc(self):
+    def test_rate_of_climb(self):
         self.assertTrue(
             math.isclose(
-                self.table[0][5],
+                self.table[0][ByKCASRowIndex.RATE_OF_CLIMB],
                 273.2,
                 # of 0 significant digits
                 abs_tol=10**-0,
             )
         )
 
-    def test_aoc(self):
+    def test_angle_of_climb(self):
         self.assertTrue(
             math.isclose(
-                self.table[0][6],
+                self.table[0][ByKCASRowIndex.ANGLE_OF_CLIMB],
                 2.28,
                 # of 2 significant digits
                 abs_tol=10**-2,
