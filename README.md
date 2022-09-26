@@ -41,3 +41,5 @@ Pretty close!
 1. J. Yates, “Predicting Performance,” KITPLANES, 19-Feb-2015. [Online]. Available: https://www.kitplanes.com/predicting-performance/.
 1. Federal Aviation Administration, Pilot’s Handbook of Aeronautical Knowledge. Oklahoma City, OK: United States Department of Transportation, Federal Aviation Administration, Airman Testing Standards Branch, 2016.
 1. S. Gudmundsson, General Aviation Aircraft Design: Applied Methods and Procedures. Oxford, UK: Butterworth-Heinemann, 2014.
+1. B. H. Carson, “Fuel Efficiency of Small Aircraft,” in AIAA Aircraft Syst. Mtg., Anaheim, CA, Aug. 4–6, 1980.
+1. R. Erb, ”Maximum Endurance, Maximum Range, and Optimum Cruise Speeds,” EAA Chapter 1000, 22-Feb-1997. [Online]. Available: https://web.archive.org/web/20201112022733/http://www.eaa1000.av.org/technicl/perfspds/perfspds.htm.
