@@ -6,11 +6,10 @@ from uuid import UUID
 import requests as requests
 
 cookies = {
-    "fosoc2": os.getenv("FOREFLIGHT_COOKIE_FOSOC2"),
-    "ffsession": os.getenv("FOREFLIGHT_COOKIE_FFSESSION"),
+    "ffsession": os.getenv("FOREFLIGHT_COOKIE_FFSESSION")
 }
 
-if None in (cookies["fosoc2"], cookies["ffsession"]):
+if None in (cookies["ffsession"],):
     raise Exception(
         "You must configure ForeFlight session cookies via the environment."
     )
