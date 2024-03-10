@@ -196,9 +196,7 @@ def propeller_power_coefficient(
     Returns:
         :math:`C_P`, propeller power coefficient.
     """
-    return power / (
-        atmospheric_density * (propeller_rps**3) * (propeller_diameter**5)
-    )
+    return power / (atmospheric_density * (propeller_rps**3) * (propeller_diameter**5))
 
 
 def power_adjustment_factor_x(total_activity_factor):

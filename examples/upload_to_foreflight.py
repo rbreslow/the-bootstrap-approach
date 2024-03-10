@@ -3,6 +3,7 @@ Small CLI to create custom ForeFlight performance profiles using Bootstrap
 Approach data. Requires that you extract cookies from a plan.foreflight.com
 browser session.
 """
+
 import os
 import sys
 from typing import Optional, Any
