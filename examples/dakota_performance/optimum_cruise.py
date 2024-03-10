@@ -72,7 +72,7 @@ def optimum_cruise(
         )
 
         best_glide_speed = calculate_best_glide(
-            gross_aircraft_weight, pressure_altitude, oat_f
+            dataplate, gross_aircraft_weight, pressure_altitude, oat_f
         )
 
         # Empirically, 2200 RPM feels right for cruise. This is also the engine speed
