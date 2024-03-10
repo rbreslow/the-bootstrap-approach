@@ -49,6 +49,18 @@ for gross_aircraft_weight in (2250, 2500, 2750, 3000):
         )
 \end{pycode}
 
+\section{Optimum Cruise}
+
+\begin{pycode}
+from examples.dakota_performance.latex import optimum_cruise_tex
+
+for gross_aircraft_weight in (2250, 2500, 2750, 3000):
+    for isa_diff in (-20, -10, 0, 10, 20):
+        print(
+            optimum_cruise_tex(gross_aircraft_weight, isa_diff)
+        )
+\end{pycode}
+
 \section{65\% Power Thence Full Throttle}
 
 \begin{pycode}

@@ -9,6 +9,7 @@ from tabulate import (
 )
 
 from examples.dakota_performance import best_range, sixty_five_percent_power
+from examples.dakota_performance.optimum_cruise import optimum_cruise
 from examples.n51sw_dataplate import N51SW
 from the_bootstrap_approach.mixture import Mixture
 from the_bootstrap_approach.performance import (
@@ -121,6 +122,58 @@ def best_range_tex(gross_aircraft_weight: float, isa_diff: float = 0) -> str:
     \item \checkitem{{Outside air temperature}}{{ISA{isa_diff:+} \\textdegree{{C}}}}
     \item \checkitem{{Winds}}{{zero}}
 \end{{itemize}}
+
+{table}
+
+\pagebreak"""
+
+
+def optimum_cruise_tex(gross_aircraft_weight: float, isa_diff: float = 0) -> str:
+    cruise_profile: PerformanceProfile = optimum_cruise(
+        N51SW, gross_aircraft_weight, isa_diff, Mixture.BEST_ECONOMY
+    )
+
+    table = tabulate(
+        cruise_profile.data[
+            :,
+            [
+                ByAltitudeRowIndex.PRESSURE_ALTITUDE,
+                ByAltitudeRowIndex.KIAS,
+                ByAltitudeRowIndex.KTAS,
+                ByAltitudeRowIndex.PROPELLER_EFFICIENCY,
+                ByAltitudeRowIndex.RPM,
+                ByAltitudeRowIndex.PBHP,
+                ByAltitudeRowIndex.GPH,
+                ByAltitudeRowIndex.MPG,
+            ],
+        ],
+        headers=(
+            r"\textbf{P\textsubscript{alt}}",
+            r"\textbf{KIAS}",
+            r"\textbf{KTAS}",
+            r"\boldmath$\eta$",
+            r"\textbf{RPM}",
+            r"\textbf{\% bhp}",
+            r"\textbf{gph}",
+            r"\textbf{mpg}",
+        ),
+        tablefmt=TABLE_FORMAT,
+        floatfmt=(".0f", ".0f", ".0f", ".3f", ".0f", ".0f", ".1f", ".1f"),
+    )
+
+    return f"""
+\subsection{{{gross_aircraft_weight} lbf, ISA{isa_diff:+} \\textdegree{{C}}}}
+
+\\textbf{{Conditions:}}
+\\begin{{itemize}}
+    \setlength\itemsep{{0em}}
+    \item \checkitem{{Mixture}}{{best economy}}
+    \item \checkitem{{Gross aircraft weight}}{{{gross_aircraft_weight} lbf}}
+    \item \checkitem{{Outside air temperature}}{{ISA{isa_diff:+} \\textdegree{{C}}}}
+    \item \checkitem{{Winds}}{{zero}}
+\end{{itemize}}
+\\textbf{{Note:}} 2200 RPM is chosen as a compromise between engine vibration and
+efficiency.
 
 {table}
 
