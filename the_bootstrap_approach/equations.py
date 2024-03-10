@@ -1,5 +1,16 @@
 import math
 
+# From Fuel and Oil Weights from the Canada Fligth Supplement.
+avgas_weights = np.array(
+    [
+        [-40, 51.5],
+        [-20, 52.5],
+        [0, 54],
+        [15, 58.5],
+        [30, 60.25],
+    ]
+)
+
 
 def engine_torque(power, propeller_rps):
     """Engine torque :math:`M` depends on the following formula:
@@ -271,7 +282,7 @@ def fuel_gal_to_lbf(fuel_gal, oat_f):
     temperature variation."""
     # For 100/130 aviation gasoline: Fuel lbf/U.S. gall = 6.077 - 0.00409 x °F.
     # [1, p. 122].
-    fuel_lbf_per_gal = 6.077 - (0.00409 * oat_f)
+    fuel_lbf_per_gal = (-7.256e-03 * oat_c) + 6.118e+00
     return fuel_gal * fuel_lbf_per_gal
 
 
