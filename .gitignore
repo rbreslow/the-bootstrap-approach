@@ -11,4 +11,10 @@ coverage.xml
 .idea
 .direnv
 .env
+
+# Latex
+*.log
+*.aux
+*.pytxcode
+pythontex-files-*
 *.pdf
