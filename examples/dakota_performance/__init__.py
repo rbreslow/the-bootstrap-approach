@@ -5,6 +5,9 @@ from examples.dakota_performance.best_range import best_range
 from examples.dakota_performance.sixty_five_percent_power import (
     sixty_five_percent_power,
 )
+from examples.dakota_performance.seventy_five_percent_power import (
+    seventy_five_percent_power,
+)
 
 __all__ = [
     "best_angle_of_climb",
@@ -12,4 +15,5 @@ __all__ = [
     "cruise_climb",
     "best_range",
     "sixty_five_percent_power",
+    "seventy_five_percent_power",
 ]
