@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# This script was a quick hack to get things building on my laptop again. A big
+# TODO is to write some actual build scripts, or improve the Nix shell so that
+# this works reliably. PYTHONPATH needs to correspond to root of the repository.
+export PATH="/usr/local/texlive/2024/bin/universal-darwin:/usr/local/texlive/2024/texmf-dist/scripts/pythontex:${PATH}"
+
+# If you pass --clean, force pythontex to recalculate all the numbers.
+if [[ "$1" == "-c" || "$1" == "--clean" ]]; then
+  rm -r pythontex-files-dakota
+fi
+
+set -e
+
+pdflatex -interaction=nonstopmode dakota.tex
+pythontex.py dakota.tex
+pdflatex -interaction=nonstopmode dakota.tex
+
+mv -v "dakota.pdf" "Dakota Performance Data (v.$(date +"%Y-%m-%d")).pdf"
