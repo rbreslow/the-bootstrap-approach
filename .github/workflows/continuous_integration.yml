@@ -33,8 +33,3 @@ jobs:
 
       - name: Run Tests
         run: tox
-
-      - name: Upload Coverage to Codecov
-        uses: codecov/codecov-action@v2
-        with:
-          fail_ci_if_error: true
