@@ -12,8 +12,10 @@ from uuid import UUID
 import numpy as np
 import numpy.typing as npt
 
-from examples.dakota_performance import cruise_climb, sixty_five_percent_power
-from examples.dakota_performance.best_range import best_range
+from examples.dakota_performance import cruise_climb
+from examples.dakota_performance.seventy_five_percent_power import (
+    seventy_five_percent_power,
+)
 from examples.foreflight_api import get_aircraft, create_profile
 from examples.n51sw_dataplate import N51SW
 from the_bootstrap_approach.equations import (
@@ -140,11 +142,11 @@ def main() -> int:
     if None in (account_uuid, aircraft_oid, aircraft_uuid):
         raise Exception("You must configure this script via the environment.")
 
-    for gross_aircraft_weight in (2250, 2500, 2750, 3000):
+    for gross_aircraft_weight in (2500, 2750, 3000):
         climb_profile: PerformanceProfile = cruise_climb(
             N51SW, gross_aircraft_weight, isa_diff=0
         )
-        cruise_profile: PerformanceProfile = sixty_five_percent_power(
+        cruise_profile: PerformanceProfile = seventy_five_percent_power(
             N51SW, gross_aircraft_weight, isa_diff=0, mixture=Mixture.BEST_POWER
         )
 
@@ -152,31 +154,11 @@ def main() -> int:
             account_uuid,
             aircraft_oid,
             aircraft_uuid,
-            f"65% Power Thence Full Throttle, {gross_aircraft_weight} lbf",
+            f"75%/F.T., Best Power, 2200 RPM, {gross_aircraft_weight} lbf",
             climb_profile.name,
             climb_profile.data,
             cruise_profile.data,
-            "137 KIAS Descent at 65% Power",
-            137,
-        )
-
-    for gross_aircraft_weight in (2250, 2500, 2750):
-        climb_profile: PerformanceProfile = cruise_climb(
-            N51SW, gross_aircraft_weight, isa_diff=0
-        )
-        cruise_profile: PerformanceProfile = best_range(
-            N51SW, gross_aircraft_weight, isa_diff=0, mixture=Mixture.BEST_ECONOMY
-        )
-
-        create_foreflight_profile(
-            account_uuid,
-            aircraft_oid,
-            aircraft_uuid,
-            f"Best Range, {gross_aircraft_weight} lbf",
-            climb_profile.name,
-            climb_profile.data,
-            cruise_profile.data,
-            "137 KIAS Descent at 65% Power",
+            "137 KIAS Descent at 75% Power",
             137,
         )
 
